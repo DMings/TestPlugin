@@ -144,7 +144,7 @@ public class RePluginClassLoader extends PathClassLoader {
     protected Class<?> findClass(String className) throws ClassNotFoundException {
         // INFO Never reach here since override loadClass , unless not found class
         if (LOG) {
-            Log.w(TAG, "NRH lcl.fc: c=" + className);
+            Log.w(TAG, "Host: c=" + className);
         }
         return super.findClass(className);
     }

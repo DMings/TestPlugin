@@ -66,9 +66,17 @@ public class PMF {
     public static void checkInit() {
         ensureInit(sContext);
     }
-
+//
     public static final Class<?> loadClass(String className, boolean resolve) {
         Class<?> clazz = null;
+//        if(className.equals("androidx.appcompat.app.AppCompatActivity")){
+//            DLog.i(TAG, "className->" + className);
+//            try {
+//                return sPlugClassLoader.getParent().loadClass("com.dming.testplugin.HookActivity");
+//            } catch (ClassNotFoundException e) {
+//                DLog.i("HookActivity: "+e.getException());
+//            }
+//        }
         if (sPlugClassLoader != null) {
 //            DLog.i(TAG, "className>" + className);
             if (className.startsWith(sPluginActivity)) {
@@ -79,7 +87,7 @@ public class PMF {
                     try {
                         clazz = sPlugClassLoader.loadPluginClass(activity);
                     } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
+                        DLog.i("PlugClassLoader: "+e.getException());
                     }
                 }
             }
