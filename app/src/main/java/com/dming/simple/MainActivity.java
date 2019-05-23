@@ -7,7 +7,6 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.dming.simple.plugin.activity.ActPlugin;
-import com.dming.simple.plugin.load.PMF;
 import com.dming.simple.utils.DLog;
 
 

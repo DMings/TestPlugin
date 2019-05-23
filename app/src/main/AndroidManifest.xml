@@ -18,20 +18,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.simple.plugin.ActivityS1"/>
-        <activity android:name="com.simple.plugin.ActivityS2"/>
-        <activity android:name="com.simple.plugin.ActivityS3"/>
-        <activity android:name="com.simple.plugin.ActivityS4"/>
-        <activity android:name="com.simple.plugin.ActivityS5"/>
-        <activity android:name="com.simple.plugin.ActivityS6"/>
-
-        <service android:name="com.simple.plugin.ServiceS1"/>
-        <service android:name="com.simple.plugin.ServiceS2"/>
-        <service android:name="com.simple.plugin.ServiceS3"/>
-
-        <provider android:authorities="com.simple.authorities" android:name=".plugin.provider.ProviderDispatch"/>
-        <receiver android:name=".plugin.receiver.BroadcastReceiverDispatch"/>
-
     </application>
 
 </manifest>
