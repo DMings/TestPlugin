@@ -17,15 +17,19 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.dming.testplugin.PluginActivityS1"/>
-        <activity android:name="com.dming.testplugin.PluginActivityS2"/>
-        <activity android:name="com.dming.testplugin.PluginActivityS3"/>
-        <activity android:name="com.dming.testplugin.PluginActivityS4"/>
-        <activity android:name="com.dming.testplugin.PluginActivityS5"/>
-        <activity android:name="com.dming.testplugin.PluginActivityS6"/>
-        <activity android:name="com.dming.testplugin.PluginActivityS7"/>
-        <activity android:name="com.dming.testplugin.PluginActivityS8"/>
-        <service android:name=".MyService"/>
+        <activity android:name="com.dming.plugin.ActivityS1"/>
+        <activity android:name="com.dming.plugin.ActivityS2"/>
+        <activity android:name="com.dming.plugin.ActivityS3"/>
+        <activity android:name="com.dming.plugin.ActivityS4"/>
+        <activity android:name="com.dming.plugin.ActivityS5"/>
+        <activity android:name="com.dming.plugin.ActivityS6"/>
+
+        <activity android:name="com.dming.plugin.ServiceS1"/>
+        <activity android:name="com.dming.plugin.ServiceS2"/>
+        <activity android:name="com.dming.plugin.ServiceS3"/>
+
+        <provider android:authorities="com.dming.authorities" android:name=".proxy.ProviderDispatch"/>
+
     </application>
 
 </manifest>

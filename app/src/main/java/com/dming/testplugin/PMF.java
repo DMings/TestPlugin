@@ -3,10 +3,7 @@ package com.dming.testplugin;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
+import android.content.pm.*;
 import android.os.Bundle;
 import android.text.TextUtils;
 import com.dming.testplugin.utils.DLog;
@@ -166,7 +163,7 @@ public class PMF {
     }
 
     private static HashMap<String, String> sActivityMap = new HashMap<>();
-    private static String sPluginActivity = "com.dming.testplugin.PluginActivity";
+    private static String sPluginActivity = "com.dming.plugin.PluginActivity";
 
     public static void initHostPkgInfo() {
         long time = System.currentTimeMillis();
@@ -193,7 +190,11 @@ public class PMF {
         String apkPath = sApkFile.getAbsolutePath();
         long time = System.currentTimeMillis();
         PackageManager packageManager = sContext.getPackageManager();
-        PackageInfo pInfo = packageManager.getPackageArchiveInfo(apkPath, PackageManager.GET_ACTIVITIES);
+        PackageInfo pInfo = packageManager.getPackageArchiveInfo(apkPath,
+                PackageManager.GET_ACTIVITIES |
+                        PackageManager.GET_SERVICES |
+                        PackageManager.GET_RECEIVERS |
+                        PackageManager.GET_PROVIDERS);
         DLog.i("Plugin time>>>" + (System.currentTimeMillis() - time));
         if (pInfo != null) {
             ApplicationInfo appInfo = pInfo.applicationInfo;
@@ -202,7 +203,19 @@ public class PMF {
             appInfo.publicSourceDir = apkPath;
             ActivityInfo[] activities = pInfo.activities;
             for (ActivityInfo activityInfo : activities) {
-                DLog.i("Plugin activityInfo>" + activityInfo.name + " packageName: "+activityInfo.packageName );
+                DLog.i("Plugin ActivityInfo>" + activityInfo.name + " packageName: "+activityInfo.packageName );
+            }
+            ServiceInfo[] services = pInfo.services;
+            for (ServiceInfo serviceInfo : services) {
+                DLog.i("Plugin ServiceInfo>" + serviceInfo.name + " packageName: "+serviceInfo.packageName );
+            }
+            ActivityInfo[] receivers = pInfo.receivers;
+            for (ActivityInfo activityInfo : receivers) {
+                DLog.i("Plugin ActivityInfo receivers>" + activityInfo.name + " packageName: "+activityInfo.packageName );
+            }
+            ProviderInfo[] providers = pInfo.providers;
+            for (ProviderInfo providerInfo : providers) {
+                DLog.i("Plugin ProviderInfo>" + providerInfo.name + " packageName: "+providerInfo.packageName );
             }
         }
     }
