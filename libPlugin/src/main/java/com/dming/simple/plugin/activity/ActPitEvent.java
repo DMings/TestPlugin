@@ -5,21 +5,22 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
+import com.dming.simple.utils.DLog;
 
 public class ActPitEvent {
 
-    public static IPitActEvent iPitActEvent;
+    public static IActPitEvent sActPitEvent;
 
-    public static void setPitActEvent(IPitActEvent iPitActEvent) {
-        ActPitEvent.iPitActEvent = iPitActEvent;
-        Log.i("DMUI","IPitActEvent>>>"+iPitActEvent);
+    public static void setPitActEvent(IActPitEvent iActPitEvent) {
+        ActPitEvent.sActPitEvent = iActPitEvent;
+        DLog.i("setPitActEvent>>>"+ iActPitEvent);
     }
 
     public static boolean startActivity(Context context,Intent intent, int requestCode, Bundle options){
-        if(iPitActEvent == null){
+        if(sActPitEvent == null){
             return false;
         }
-        return iPitActEvent.startActivityForResult(context,intent, requestCode, options);
+        return sActPitEvent.startActivityForResult(context,intent, requestCode, options);
     }
 
     public static Resources getResources() {

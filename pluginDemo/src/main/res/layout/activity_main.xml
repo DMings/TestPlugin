@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    tools:context=".NDKActivity">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:orientation="vertical"
+              tools:context=".TestNDKActivity">
 
     <Button
-        android:id="@+id/sample_text"
-        android:layout_width="wrap_content"
+        android:id="@+id/test_jni"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TestCpp"/>
+        android:textAllCaps="false"
+        android:text="测试JNI"/>
 
     <Button
         android:id="@+id/testBtn"
-        android:layout_marginTop="50dp"
-        android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textAllCaps="false"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="StartACT" />
+        android:text="插件内Activity跳转" />
 </LinearLayout>

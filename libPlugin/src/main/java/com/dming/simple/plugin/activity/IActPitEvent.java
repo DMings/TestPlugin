@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-public interface IPitActEvent {
+public interface IActPitEvent {
 
     boolean startActivityForResult(Context context, Intent intent, int requestCode, Bundle options);
 

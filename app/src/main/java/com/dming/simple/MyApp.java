@@ -11,12 +11,6 @@ public class MyApp extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        boolean b = PatchClassLoaderUtils.patch(this);
-        if (b) {
-            PMF.initInThread(this);
-            Log.i(TAG, "Patch ClassLoader success");
-        } else {
-            Log.i(TAG, "Patch ClassLoader false");
-        }
+        SPlugin.init(this);
     }
 }

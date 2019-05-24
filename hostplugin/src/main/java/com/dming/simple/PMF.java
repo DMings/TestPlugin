@@ -4,18 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.*;
 import com.dming.simple.plugin.activity.ActPlugin;
-import com.dming.simple.plugin.activity.IPitActEvent;
 import com.dming.simple.utils.DLog;
-import com.dming.simple.utils.ReflectUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 
 public class PMF {
-
-    private static final String TAG = "RePluginClassLoader";
 
     private static volatile FClassLoader sPlugClassLoader;
     private static volatile File sApkFile;
@@ -27,21 +22,7 @@ public class PMF {
             synchronized (PMF.class) {
                 if (sPlugClassLoader == null) {
                     sPlugClassLoader = generateClassLoader(context);
-
-                    try {
-                        ReflectUtils.invokeMethod(sPlugClassLoader, "com.dming.testplugin.DexResources",
-                                "initResources", null, new Class[]{Context.class, File.class}, context, sApkFile);
-                        ReflectUtils.invokeMethod(sPlugClassLoader, "com.dming.testplugin.DexActivitys",
-                                "setDealDexActivity", null, new Class[]{IPitActEvent.class}, ActPlugin.sPitActEvent);
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchMethodException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
+                    ActPlugin.init(sPlugClassLoader,sContext,sApkFile);
                 }
             }
         }
