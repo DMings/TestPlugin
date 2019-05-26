@@ -7,10 +7,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
-import com.dming.simple.plugin.activity.BasePitActivity;
+import com.dming.simple.plugin.activity.PluginActivity;
 import com.dming.testndk.one.OneActivity;
 
-public class TestNDKActivity extends BasePitActivity {
+public class TestNDKActivity extends PluginActivity {
 
     static {
         System.loadLibrary("testjni");

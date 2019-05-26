@@ -17,6 +17,7 @@
 package com.dming.simple;
 
 import android.util.Log;
+import com.dming.simple.utils.DLog;
 import com.dming.simple.utils.ReflectUtils;
 import dalvik.system.PathClassLoader;
 
@@ -119,19 +120,18 @@ public class RePluginClassLoader extends PathClassLoader {
 
     @Override
     protected Class<?> loadClass(String className, boolean resolve) throws ClassNotFoundException {
-        //
+        DLog.e("loadClass className: " + className);
         Class<?> c = null;
-        c = PMF.loadClass(className, resolve);
+        c = SPlugin.getInstance().loadClass(className, resolve);
         if (c != null) {
             return c;
         }
         //
         try {
             c = mOrig.loadClass(className);
-            // 只有开启“详细日志”才会输出，防止“刷屏”现象
-            if (LOG) {
-                Log.d(TAG, "loadClass: load other class, cn=" + className);
-            }
+//            if (LOG) {
+//                DLog.e("loadClass: load other class, cn=" + className);
+//            }
             return c;
         } catch (Throwable e) {
             //
@@ -143,9 +143,9 @@ public class RePluginClassLoader extends PathClassLoader {
     @Override
     protected Class<?> findClass(String className) throws ClassNotFoundException {
         // INFO Never reach here since override loadClass , unless not found class
-        if (LOG) {
-            Log.w(TAG, "Host: c=" + className);
-        }
+//        if (LOG) {
+//            DLog.e("Host: c=" + className);
+//        }
         return super.findClass(className);
     }
 

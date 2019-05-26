@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.Nullable;
-import com.dming.simple.plugin.activity.BasePitActivity;
+import com.dming.simple.plugin.activity.PluginActivity;
 import com.dming.testndk.two.TwoActivity;
 
-public class OneActivity extends BasePitActivity {
+public class OneActivity extends PluginActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
