@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                ComponentName cn = new ComponentName(MainActivity.this.getPackageName(), "com.dming.testndk.TestNDKActivity");
+                ComponentName cn = new ComponentName(MainActivity.this.getPackageName(), "com.dming.testndk.TestActivity");
                 intent.setComponent(cn);
                 intent.putExtra("Plugin","xxxxxxxx");
 //                intent.putExtra("","");

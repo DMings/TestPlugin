@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import com.dming.simple.SPlugin;
 import com.dming.simple.utils.DLog;
+import com.dming.simple.utils.ReflectUtils;
 import com.dming.simple.utils.SToast;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,8 +24,22 @@ public class ActPlugin {
     private static String sPackageName;
 
     public static void initActivityPlugin(Context context, File apkFile) throws Exception {
-        ActPitEvent.setResources(context, apkFile);
-        ActPitEvent.setPitActEvent(ActPlugin.sPitActEvent);
+//        ActPitEvent.setResources(actResources.createResources(context, apkFile));
+//        ActPitEvent.setPitActEvent(ActPlugin.sPitActEvent);
+        try {
+            ReflectUtils.invokeMethod(SPlugin.getInstance().mPlugClassLoader, ActPitEvent.class.getName(),
+                    "setResources", null, new Class[]{Context.class, File.class}, context, apkFile);
+            ReflectUtils.invokeMethod(SPlugin.getInstance().mPlugClassLoader, ActPitEvent.class.getName(),
+                    "setPitActEvent", null, new Class[]{IActPitEvent.class}, ActPlugin.sPitActEvent);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
 //    public static void init(ClassLoader plugClassLoader,Context context,File apkFile){
