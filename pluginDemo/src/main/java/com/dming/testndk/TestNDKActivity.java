@@ -3,12 +3,15 @@ package com.dming.testndk;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 import com.dming.simple.plugin.activity.PluginActivity;
+import com.dming.simple.utils.DLog;
 import com.dming.testndk.one.OneActivity;
+import  com.dming.testndk.R;
 
 public class TestNDKActivity extends PluginActivity {
 
@@ -46,4 +49,18 @@ public class TestNDKActivity extends PluginActivity {
 
     public native String getMsgFromNDK();
 
+    @Override
+    public Resources.Theme getTheme() {
+        return super.getTheme();
+    }
+
+    @Override
+    public void setTheme(int resid) {
+        int[] ints = com.dming.testndk.R.styleable.AppCompatTheme;
+        for (int i = 0;i <ints.length;i++ ){
+            DLog.i("ints=>: "+Integer.toHexString(ints[i]));
+        }
+        DLog.i("AppCompatTheme_windowActionBar=>: "+com.dming.testndk.R.styleable.AppCompatTheme_windowActionBar);
+        super.setTheme(resid);
+    }
 }

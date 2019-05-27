@@ -1,7 +1,6 @@
 package com.dming.simple.plugin.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -9,9 +8,10 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import com.dming.simple.utils.DLog;
 
-public class PluginActivity extends Activity {
+public class PluginActivity extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context context) {
@@ -20,6 +20,7 @@ public class PluginActivity extends Activity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setTheme(0x7f0c0006);
         Intent intent = getIntent();
         String plugin = intent.getStringExtra("Plugin");
         ActivityInfo activityInfo = intent.getParcelableExtra("ActivityInfo");

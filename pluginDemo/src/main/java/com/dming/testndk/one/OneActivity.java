@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import com.dming.simple.plugin.activity.PluginActivity;
+import com.dming.testndk.R;
 import com.dming.testndk.TestActivity;
 
 public class OneActivity extends PluginActivity {

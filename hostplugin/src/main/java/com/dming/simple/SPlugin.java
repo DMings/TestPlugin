@@ -18,7 +18,7 @@ import java.io.InputStream;
 public class SPlugin {
 
     private static volatile SPlugin sSPlugin;
-    private FClassLoader mPlugClassLoader;
+    public FClassLoader mPlugClassLoader;
     private boolean mPatchClassLoader = false;
     private boolean mLoadPlugin = false;
 
@@ -86,9 +86,9 @@ public class SPlugin {
 
     private void initPlugin(final Context context, final OnPluginInitListener onPluginInitListener, final PluginRunnable pluginRunnable) {
         if (isPatchClassLoader()) {
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
                     try {
                         File apkFile = pluginRunnable.getApkFile();
                         dealPlugin(context, apkFile);
@@ -109,8 +109,8 @@ public class SPlugin {
                             }
                         }
                     });
-//                }
-//            }).start();
+                }
+            }).start();
         }
     }
 

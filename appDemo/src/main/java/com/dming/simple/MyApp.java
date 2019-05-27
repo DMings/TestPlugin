@@ -17,8 +17,8 @@ public class MyApp extends Application {
 
     @Override
     public Resources getResources() {
-        DLog.e("getResources--------p------------>>>");
-        return ActPitEvent.getResources();
-//        return super.getResources();
+        DLog.e("getResources-------------------->>>");
+//        return ActPitEvent.getResources();
+        return super.getResources();
     }
 }

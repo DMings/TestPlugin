@@ -4,13 +4,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
+import android.content.res.AssetManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import com.dming.simple.SPlugin;
 import com.dming.simple.utils.DLog;
 import com.dming.simple.utils.SToast;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +29,28 @@ public class ActPlugin {
 
     public static void initActivityPlugin(Context context, File apkFile) throws Exception {
         ActPitEvent.setResources(context, apkFile);
+//        createResources(context, apkFile);
         ActPitEvent.setPitActEvent(ActPlugin.sPitActEvent);
+    }
+
+    private static void createResources(Context context, File apk) throws Exception {
+        SPlugin sPlugin = SPlugin.getInstance();
+        Resources hostResources = context.getResources();
+        Class<?> clazz = sPlugin.mPlugClassLoader.loadClass(Resources.class.getName());
+        AssetManager assetManager = createAssetManager(apk);
+        Constructor<?> constructor = clazz.getConstructor(AssetManager.class, DisplayMetrics.class, Configuration.class);
+        Resources resources = (Resources) constructor.newInstance(assetManager, hostResources.getDisplayMetrics(), hostResources.getConfiguration());
+        ActPitEvent.sResource = resources;
+//        Resources resources = new Resources(assetManager, hostResources.getDisplayMetrics(), hostResources.getConfiguration());
+        DLog.i("resources>>>"+resources.toString());
+    }
+
+    private static AssetManager createAssetManager(File apk) throws Exception {
+        AssetManager am = AssetManager.class.newInstance();
+        Method addAssetPath = am.getClass().getDeclaredMethod("addAssetPath",String.class );
+        addAssetPath.invoke(am,apk.getAbsolutePath());
+        DLog.i("AssetManager path:  "+apk.getAbsolutePath());
+        return am;
     }
 
 //    public static void init(ClassLoader plugClassLoader,Context context,File apkFile){
