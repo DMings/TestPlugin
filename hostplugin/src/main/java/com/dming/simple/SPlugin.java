@@ -18,7 +18,7 @@ import java.io.InputStream;
 public class SPlugin {
 
     private static volatile SPlugin sSPlugin;
-    public FClassLoader mPlugClassLoader;
+    private FClassLoader mPlugClassLoader;
     private boolean mPatchClassLoader = false;
     private boolean mLoadPlugin = false;
 

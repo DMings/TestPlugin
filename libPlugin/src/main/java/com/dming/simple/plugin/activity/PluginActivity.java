@@ -49,8 +49,4 @@ public class PluginActivity extends AppCompatActivity {
         return super.getResources();
     }
 
-    @Override
-    public void setTheme(int resid) {
-        super.setTheme(resid);
-    }
 }
