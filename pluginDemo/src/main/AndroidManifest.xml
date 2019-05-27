@@ -23,6 +23,7 @@
         </activity>
         <activity android:name=".one.OneActivity" />
         <activity android:name=".two.TwoActivity" />
+        <activity android:name=".TestActivity"/>
 
         <receiver android:name=".TestBroadcastReceiver"/>
         <service android:name=".TestService" />

@@ -1,6 +1,7 @@
 package com.dming.simple.plugin.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -8,15 +9,13 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import com.dming.simple.utils.DLog;
 
-public class PluginActivity extends AppCompatActivity {
+public class PluginActivity extends Activity {
 
     @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(newBase);
-
+    protected void attachBaseContext(Context context) {
+        super.attachBaseContext(context);
     }
 
     @Override
@@ -44,6 +43,7 @@ public class PluginActivity extends AppCompatActivity {
     public Resources getResources() {
         Resources resources = ActPitEvent.getResources();
         if(resources != null){
+            DLog.i("getResources>"+resources);
             return resources;
         }
         return super.getResources();
