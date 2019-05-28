@@ -2,6 +2,7 @@ package com.dming.simple.plugin.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -15,6 +16,9 @@ public class ActPitEvent {
 
     public static IActPitEvent sActPitEvent;
     public static Resources sResource;
+    public static Resources sSrcResource;
+    public static ClassLoader sClassLoader;
+    public static ApplicationInfo sApplicationInfo;
 
     public static void setPitActEvent(IActPitEvent iActPitEvent) {
         ActPitEvent.sActPitEvent = iActPitEvent;
@@ -29,14 +33,13 @@ public class ActPitEvent {
     }
 
     public static Resources getResources() {
-        if (sResource != null) {
-            return sResource;
-        }
-        return null;
+        return sResource;
     }
 
     public static void setResources(Context context, File apk) throws Exception {
-        sResource = createResources(context,apk);
+//        sSrcContext = context;
+//        sSrcResource = context.getResources();
+//        sResource = createResources(context,apk);
         DLog.i("setResources>>>"+sResource.toString());
     }
 

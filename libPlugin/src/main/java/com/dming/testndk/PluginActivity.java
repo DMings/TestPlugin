@@ -1,14 +1,17 @@
-package com.dming.simple.plugin.activity;
+package com.dming.testndk;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import com.dming.simple.plugin.activity.ActPitEvent;
 import com.dming.simple.utils.DLog;
 
 public class PluginActivity extends AppCompatActivity {
@@ -20,7 +23,6 @@ public class PluginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setTheme(0x7f0c0006);
         Intent intent = getIntent();
         String plugin = intent.getStringExtra("Plugin");
         ActivityInfo activityInfo = intent.getParcelableExtra("ActivityInfo");
@@ -38,6 +40,26 @@ public class PluginActivity extends AppCompatActivity {
                 super.startActivityForResult(intent, requestCode);
             }
         }
+    }
+
+    @Override
+    public ClassLoader getClassLoader() {
+        return ActPitEvent.sClassLoader;
+//        return super.getClassLoader();
+    }
+
+    @Override
+    public AssetManager getAssets() {
+        Resources resources = ActPitEvent.getResources();
+        if(resources != null){
+            return resources.getAssets();
+        }
+        return super.getAssets();
+    }
+
+    @Override
+    public ApplicationInfo getApplicationInfo() {
+        return ActPitEvent.sApplicationInfo;
     }
 
     @Override

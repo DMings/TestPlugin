@@ -8,10 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
-import com.dming.simple.plugin.activity.PluginActivity;
-import com.dming.simple.utils.DLog;
 import com.dming.testndk.one.OneActivity;
-import  com.dming.testndk.R;
 
 public class TestNDKActivity extends PluginActivity {
 
@@ -22,6 +19,7 @@ public class TestNDKActivity extends PluginActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppTheme2);
         setContentView(R.layout.activity_main);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
@@ -56,11 +54,11 @@ public class TestNDKActivity extends PluginActivity {
 
     @Override
     public void setTheme(int resid) {
-        int[] ints = com.dming.testndk.R.styleable.AppCompatTheme;
-        for (int i = 0;i <ints.length;i++ ){
-            DLog.i("ints=>: "+Integer.toHexString(ints[i]));
-        }
-        DLog.i("AppCompatTheme_windowActionBar=>: "+com.dming.testndk.R.styleable.AppCompatTheme_windowActionBar);
+//        int[] ints = com.dming.testndk.R.styleable.AppCompatTheme;
+//        for (int i = 0;i <ints.length;i++ ){
+//            DLog.i("ints=>: "+Integer.toHexString(ints[i]));
+//        }
+//        DLog.i("AppCompatTheme_windowActionBar=>: "+com.dming.testndk.R.styleable.AppCompatTheme_windowActionBar);
         super.setTheme(resid);
     }
 }

@@ -5,8 +5,10 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.*;
+import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Looper;
+import com.dming.simple.plugin.activity.ActPitEvent;
 import com.dming.simple.plugin.activity.ActPlugin;
 import com.dming.simple.utils.DLog;
 import com.dming.simple.utils.FileUtils;
@@ -142,6 +144,7 @@ public class SPlugin {
         );
         dealHostPkgInfo(context);
         dealPluginPkgInfo(context, apkFile);
+        ActPitEvent.sClassLoader = classLoader;
         mPlugClassLoader = classLoader;
     }
 
@@ -175,6 +178,13 @@ public class SPlugin {
             ApplicationInfo appInfo = pInfo.applicationInfo;
             appInfo.sourceDir = apkPath;
             appInfo.publicSourceDir = apkPath;
+            ActPitEvent.sApplicationInfo = appInfo;
+            try {
+                ActPitEvent.sResource = packageManager.getResourcesForApplication(appInfo);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+
             DLog.i("Plugin appInfo theme>" + Integer.toHexString(appInfo.theme));
             ActPlugin.obtainPluginActivity(pInfo);
 
