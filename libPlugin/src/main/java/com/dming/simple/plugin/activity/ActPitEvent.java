@@ -2,60 +2,59 @@ package com.dming.simple.plugin.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import com.dming.simple.utils.DLog;
 
 import java.io.File;
 import java.lang.reflect.Method;
 
+@Deprecated
 public class ActPitEvent {
 
-    public static IActPitEvent sActPitEvent;
-    public static Resources sResource;
-    public static Resources sSrcResource;
-    public static ClassLoader sClassLoader;
-    public static ApplicationInfo sApplicationInfo;
+    private IActPitEvent mActPitEvent;
+    private Resources mResource;
 
-    public static void setPitActEvent(IActPitEvent iActPitEvent) {
-        ActPitEvent.sActPitEvent = iActPitEvent;
-        DLog.i("setPitActEvent>>>"+ iActPitEvent);
+    public void setPitActEvent(IActPitEvent iActPitEvent) {
+        this.mActPitEvent = iActPitEvent;
+        DLog.i("setPitActEvent>>>" + iActPitEvent);
     }
 
-    public static boolean startActivity(Intent intent, int requestCode, Bundle options){
-        if(sActPitEvent == null){
+    public void setResources(Resources resources) {
+        mResource = resources;
+        DLog.i("setResources>>>" + mResource.toString());
+    }
+
+    public boolean startActivity(Intent intent, int requestCode, Bundle options) {
+        if (mActPitEvent == null) {
             return false;
         }
-        return sActPitEvent.startActivityForResult(intent, requestCode, options);
+        return mActPitEvent.startActivityForResult(intent, requestCode, options);
     }
 
-    public static Resources getResources() {
-        return sResource;
+    public Resources getResources() {
+        return mResource;
     }
 
-    public static void setResources(Context context, File apk) throws Exception {
-//        sSrcContext = context;
-//        sSrcResource = context.getResources();
-//        sResource = createResources(context,apk);
-        DLog.i("setResources>>>"+sResource.toString());
+    private void setResources(Context context, File apk) throws Exception {
+        mResource = createResources(context, apk);
+        DLog.i("setResources>>>" + mResource.toString());
     }
 
-    private static Resources createResources(Context context, File apk) throws Exception {
+    private Resources createResources(Context context, File apk) throws Exception {
         Resources hostResources = context.getResources();
         AssetManager assetManager = createAssetManager(apk);
         Resources resources = new Resources(assetManager, hostResources.getDisplayMetrics(), hostResources.getConfiguration());
-        DLog.i("resources>>>"+resources.toString());
+        DLog.i("resources>>>" + resources.toString());
         return resources;
     }
 
-    private static AssetManager createAssetManager(File apk) throws Exception {
+    private AssetManager createAssetManager(File apk) throws Exception {
         AssetManager am = AssetManager.class.newInstance();
-        Method addAssetPath = am.getClass().getDeclaredMethod("addAssetPath",String.class );
-        addAssetPath.invoke(am,apk.getAbsolutePath());
-        DLog.i("AssetManager path:  "+apk.getAbsolutePath());
+        Method addAssetPath = am.getClass().getDeclaredMethod("addAssetPath", String.class);
+        addAssetPath.invoke(am, apk.getAbsolutePath());
+        DLog.i("AssetManager path:  " + apk.getAbsolutePath());
         return am;
     }
 

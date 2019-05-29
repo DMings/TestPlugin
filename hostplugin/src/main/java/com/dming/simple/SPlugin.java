@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.*;
+import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Looper;
-import com.dming.simple.plugin.activity.ActPitEvent;
 import com.dming.simple.plugin.activity.ActPlugin;
 import com.dming.simple.utils.DLog;
 import com.dming.simple.utils.FileUtils;
@@ -14,6 +14,7 @@ import com.dming.simple.utils.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 
 public class SPlugin {
 
@@ -145,10 +146,9 @@ public class SPlugin {
                 ndkOutputDir.getAbsolutePath(),
                 context.getClassLoader()
         );
+        mPlugClassLoader = classLoader;
         dealHostPkgInfo(context);
         dealPluginPkgInfo(context, apkFile);
-        ActPitEvent.sClassLoader = classLoader;
-        mPlugClassLoader = classLoader;
     }
 
     private void dealHostPkgInfo(Context context) throws PackageManager.NameNotFoundException {
@@ -181,12 +181,27 @@ public class SPlugin {
             ApplicationInfo appInfo = pInfo.applicationInfo;
             appInfo.sourceDir = apkPath;
             appInfo.publicSourceDir = apkPath;
-            ActPitEvent.sApplicationInfo = appInfo;
+            //
             try {
-                ActPitEvent.sSrcResource = context.getResources();
-                ActPitEvent.sResource = packageManager.getResourcesForApplication(appInfo);
-            } catch (PackageManager.NameNotFoundException e) {}
+                Resources resource = packageManager.getResourcesForApplication(appInfo);
+                Class<?> pluginClass = Class.forName(PluginActivity.class.getName(), true, mPlugClassLoader);
+                Field resources = pluginClass.getDeclaredField("sResources");
+                Field applicationInfo = pluginClass.getDeclaredField("sApplicationInfo");
+                Field theme = pluginClass.getDeclaredField("sTheme");
+//                Field iActPitEvent = pluginClass.getDeclaredField("sActPitEvent");
+                resources.set(null,resource);
+                applicationInfo.set(null,appInfo);
+                theme.set(null,resource.newTheme());
+//                iActPitEvent.set(null,ActPlugin.sPitActEvent);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }catch (PackageManager.NameNotFoundException e) {
 
+            }
             DLog.i("Plugin appInfo theme>" + Integer.toHexString(appInfo.theme));
             ActPlugin.obtainPluginActivity(pInfo);
 

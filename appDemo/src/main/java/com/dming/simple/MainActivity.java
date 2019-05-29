@@ -12,21 +12,27 @@ import com.dming.simple.plugin.activity.ActPlugin;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static boolean b = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SPlugin.initPlugin(this, "NDK_1.0.3.apk", new OnPluginInitListener() {
-            @Override
-            public void onSuccess() {
-                Toast.makeText(MainActivity.this, "插件加载成功", Toast.LENGTH_SHORT).show();
-            }
+        if(!b){
+            b = true;
+            SPlugin.initPlugin(this, "NDK_1.0.3.apk", new OnPluginInitListener() {
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(MainActivity.this, "插件加载成功", Toast.LENGTH_SHORT).show();
+                }
 
-            @Override
-            public void onFailure() {
-                Toast.makeText(MainActivity.this, "插件加载失败", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure() {
+                    Toast.makeText(MainActivity.this, "插件加载失败", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
 
         findViewById(R.id.testBtn).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -129,23 +129,13 @@ public class RePluginClassLoader extends PathClassLoader {
         //
         try {
             c = mOrig.loadClass(className);
-//            if (LOG) {
-//                DLog.e("loadClass: load other class, cn=" + className);
-//            }
             return c;
-        } catch (Throwable e) {
-            //
-        }
-        //
+        } catch (Throwable e) {}
         return super.loadClass(className, resolve);
     }
 
     @Override
     protected Class<?> findClass(String className) throws ClassNotFoundException {
-        // INFO Never reach here since override loadClass , unless not found class
-//        if (LOG) {
-//            DLog.e("Host: c=" + className);
-//        }
         return super.findClass(className);
     }
 
