@@ -1,5 +1,6 @@
 package com.dming.simple;
 
+import com.dming.simple.utils.DLog;
 import dalvik.system.DexClassLoader;
 
 public class FClassLoader extends DexClassLoader {
@@ -16,4 +17,9 @@ public class FClassLoader extends DexClassLoader {
         return c;
     }
 
+    @Override
+    protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+//        DLog.e("FClassLoader: "+name);
+        return super.loadClass(name, resolve);
+    }
 }

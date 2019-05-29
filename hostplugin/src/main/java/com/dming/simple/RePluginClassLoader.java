@@ -122,7 +122,7 @@ public class RePluginClassLoader extends PathClassLoader {
     protected Class<?> loadClass(String className, boolean resolve) throws ClassNotFoundException {
         DLog.e("loadClass className: " + className);
         Class<?> c = null;
-        c = SPlugin.getInstance().loadClass(className, resolve);
+        c = SPlugin.getInstance().loadClass(className, mOrig);
         if (c != null) {
             return c;
         }

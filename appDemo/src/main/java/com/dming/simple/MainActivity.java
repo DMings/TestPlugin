@@ -31,8 +31,10 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.testBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent();
-                ComponentName cn = new ComponentName(MainActivity.this.getPackageName(), "com.dming.testndk.TestNDKActivity");
+//                ComponentName cn = new ComponentName(MainActivity.this.getPackageName(), "com.dming.simple.TestActivityApp");
+                ComponentName cn = new ComponentName(MainActivity.this.getPackageName(), "com.dming.testndk.one.OneActivity");
                 intent.setComponent(cn);
                 intent.putExtra("Plugin","xxxxxxxx");
 //                intent.putExtra("","");

@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.ApplicationInfo;
-import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +16,8 @@ public class PluginActivity extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context context) {
+        DLog.i("PluginActivity.this.getResources: "+PluginActivity.this.getResources());
+        DLog.i("context getResources: "+context.getResources());
         super.attachBaseContext(context);
     }
 
@@ -42,34 +42,33 @@ public class PluginActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public ClassLoader getClassLoader() {
-        return ActPitEvent.sClassLoader;
-//        return super.getClassLoader();
-    }
-
-    @Override
-    public AssetManager getAssets() {
-        Resources resources = ActPitEvent.getResources();
-        if(resources != null){
-            return resources.getAssets();
-        }
-        return super.getAssets();
-    }
-
-    @Override
-    public ApplicationInfo getApplicationInfo() {
-        return ActPitEvent.sApplicationInfo;
-    }
+//    @Override
+//    public ClassLoader getClassLoader() {
+//        return ActPitEvent.sClassLoader;
+//    }
+//
+//    @Override
+//    public AssetManager getAssets() {
+//        return ActPitEvent.getResources().getAssets();
+//    }
+//
+//    @Override
+//    public ApplicationInfo getApplicationInfo() {
+//        return ActPitEvent.sApplicationInfo;
+//    }
 
     @Override
     public Resources getResources() {
-        Resources resources = ActPitEvent.getResources();
-        if(resources != null){
-            DLog.i("getResources>"+resources);
-            return resources;
-        }
-        return super.getResources();
+        return ActPitEvent.getResources();
     }
 
+//    private Resources.Theme mTheme;
+//
+//    @Override
+//    public Resources.Theme getTheme() {
+//        if(mTheme == null){
+//            mTheme = ActPitEvent.getResources().newTheme();
+//        }
+//        return mTheme;
+//    }
 }

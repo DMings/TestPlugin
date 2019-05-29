@@ -3,9 +3,7 @@ package com.dming.simple;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.*;
-import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Looper;
 import com.dming.simple.plugin.activity.ActPitEvent;
@@ -117,7 +115,7 @@ public class SPlugin {
     }
 
 
-    Class<?> loadClass(String className, boolean resolve) {
+    Class<?> loadClass(String className, ClassLoader origClassLoader) {
         Class<?> clazz = null;
 //        DLog.e("loadClass className: " + className);
         if (mPlugClassLoader != null) {
@@ -125,10 +123,15 @@ public class SPlugin {
             if (activity != null) {
                 try {
                     clazz = mPlugClassLoader.loadPluginClass(activity);
-//                    clazz = mPlugClassLoader.loadClass(activity);
                 } catch (ClassNotFoundException e) {
-                    DLog.i("PlugClassLoader: " + e.getMessage());
+                    try {
+                        clazz = origClassLoader.loadClass(activity);
+                    } catch (ClassNotFoundException e1) {}
                 }
+            }else {
+                try {
+                    clazz = mPlugClassLoader.loadPluginClass(className);
+                } catch (ClassNotFoundException e) {}
             }
         }
         return clazz;
@@ -180,10 +183,9 @@ public class SPlugin {
             appInfo.publicSourceDir = apkPath;
             ActPitEvent.sApplicationInfo = appInfo;
             try {
+                ActPitEvent.sSrcResource = context.getResources();
                 ActPitEvent.sResource = packageManager.getResourcesForApplication(appInfo);
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
+            } catch (PackageManager.NameNotFoundException e) {}
 
             DLog.i("Plugin appInfo theme>" + Integer.toHexString(appInfo.theme));
             ActPlugin.obtainPluginActivity(pInfo);

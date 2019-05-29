@@ -1,13 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
           package="com.dming.simple">
 
-    <application tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="com.dming.simple.ActivityS1" android:theme="@style/Theme.AppCompat"/>
-        <activity android:name="com.dming.simple.ActivityS2" android:theme="@style/Theme.AppCompat"/>
-        <activity android:name="com.dming.simple.ActivityS3" android:theme="@style/Theme.AppCompat"/>
-        <activity android:name="com.dming.simple.ActivityS4" android:theme="@style/Theme.AppCompat"/>
-        <activity android:name="com.dming.simple.ActivityS5" android:theme="@style/Theme.AppCompat"/>
-        <activity android:name="com.dming.simple.ActivityS6" android:theme="@style/Theme.AppCompat"/>
+    <application tools:ignore="GoogleAppIndexingWarning" >
+        <activity android:name="com.dming.simple.ActivityS1"/>
+        <activity android:name="com.dming.simple.ActivityS2"/>
+        <activity android:name="com.dming.simple.ActivityS3"/>
+        <activity android:name="com.dming.simple.ActivityS4"/>
+        <activity android:name="com.dming.simple.ActivityS5"/>
+        <activity android:name="com.dming.simple.ActivityS6"/>
 
         <service android:name="com.dming.simple.ServiceS1"/>
         <service android:name="com.dming.simple.ServiceS2"/>
