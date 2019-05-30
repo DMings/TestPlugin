@@ -3,7 +3,6 @@ package com.dming.testndk;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +19,6 @@ public class TestNDKActivity extends PluginActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.AppTheme2);
         setContentView(R.layout.activity_main);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
@@ -48,18 +46,4 @@ public class TestNDKActivity extends PluginActivity {
 
     public native String getMsgFromNDK();
 
-    @Override
-    public Resources.Theme getTheme() {
-        return super.getTheme();
-    }
-
-    @Override
-    public void setTheme(int resid) {
-//        int[] ints = com.dming.testndk.R.styleable.AppCompatTheme;
-//        for (int i = 0;i <ints.length;i++ ){
-//            DLog.i("ints=>: "+Integer.toHexString(ints[i]));
-//        }
-//        DLog.i("AppCompatTheme_windowActionBar=>: "+com.dming.testndk.R.styleable.AppCompatTheme_windowActionBar);
-        super.setTheme(resid);
-    }
 }

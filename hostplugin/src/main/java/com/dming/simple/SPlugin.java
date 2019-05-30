@@ -116,23 +116,19 @@ public class SPlugin {
     }
 
 
-    Class<?> loadClass(String className, ClassLoader origClassLoader) {
+    Class<?> loadClass(String className, boolean resolve) {
         Class<?> clazz = null;
 //        DLog.e("loadClass className: " + className);
         if (mPlugClassLoader != null) {
             String activity = ActPlugin.solveActClass(className);
-            if (activity != null) {
-                try {
+            try {
+                if (activity != null) {
                     clazz = mPlugClassLoader.loadPluginClass(activity);
-                } catch (ClassNotFoundException e) {
-                    try {
-                        clazz = origClassLoader.loadClass(activity);
-                    } catch (ClassNotFoundException e1) {}
-                }
-            }else {
-                try {
+                } else {
                     clazz = mPlugClassLoader.loadPluginClass(className);
-                } catch (ClassNotFoundException e) {}
+                }
+            } catch (ClassNotFoundException e) {
+//                DLog.i("className: "+className + " Not find!");
             }
         }
         return clazz;
@@ -184,14 +180,16 @@ public class SPlugin {
             //
             try {
                 Resources resource = packageManager.getResourcesForApplication(appInfo);
-                Class<?> pluginClass = Class.forName(PluginActivity.class.getName(), true, mPlugClassLoader);
+                Class<?> pluginClass = Class.forName("com.dming.simple.PluginActivity", true, mPlugClassLoader);
                 Field resources = pluginClass.getDeclaredField("sResources");
                 Field applicationInfo = pluginClass.getDeclaredField("sApplicationInfo");
                 Field theme = pluginClass.getDeclaredField("sTheme");
+                Field classLoader = pluginClass.getDeclaredField("sClassLoader");
 //                Field iActPitEvent = pluginClass.getDeclaredField("sActPitEvent");
-                resources.set(null,resource);
-                applicationInfo.set(null,appInfo);
-                theme.set(null,resource.newTheme());
+                resources.set(null, resource);
+                applicationInfo.set(null, appInfo);
+                theme.set(null, resource.newTheme());
+                classLoader.set(null, mPlugClassLoader);
 //                iActPitEvent.set(null,ActPlugin.sPitActEvent);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -199,7 +197,7 @@ public class SPlugin {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
-            }catch (PackageManager.NameNotFoundException e) {
+            } catch (PackageManager.NameNotFoundException e) {
 
             }
             DLog.i("Plugin appInfo theme>" + Integer.toHexString(appInfo.theme));

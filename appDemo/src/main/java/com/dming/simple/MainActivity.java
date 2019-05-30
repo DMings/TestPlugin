@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent();
 //                ComponentName cn = new ComponentName(MainActivity.this.getPackageName(), "com.dming.simple.TestActivityApp");
-                ComponentName cn = new ComponentName(MainActivity.this.getPackageName(), "com.dming.testndk.one.OneActivity");
+                ComponentName cn = new ComponentName(MainActivity.this.getPackageName(), "com.dming.testndk.TestNDKActivity");
                 intent.setComponent(cn);
                 intent.putExtra("Plugin","xxxxxxxx");
 //                intent.putExtra("","");

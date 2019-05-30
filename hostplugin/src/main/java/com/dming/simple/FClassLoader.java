@@ -14,6 +14,7 @@ public class FClassLoader extends DexClassLoader {
         if (c == null) {
             c = findClass(name);
         }
+        DLog.e("loadPluginClass className: " + name);
         return c;
     }
 

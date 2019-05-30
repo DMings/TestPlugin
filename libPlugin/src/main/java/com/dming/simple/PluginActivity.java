@@ -6,11 +6,9 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import com.dming.simple.plugin.activity.IActPitEvent;
 import com.dming.simple.utils.DLog;
 
 public class PluginActivity extends AppCompatActivity {
@@ -21,18 +19,20 @@ public class PluginActivity extends AppCompatActivity {
 
     public static Resources sResources;
     public static ApplicationInfo sApplicationInfo;
+    public static ClassLoader sClassLoader;
     public static Resources.Theme sTheme;
 //    public static IActPitEvent sActPitEvent;
 
     @Override
     protected void attachBaseContext(Context context) {
-        DLog.i("PluginActivity.this.getResources: " + PluginActivity.this.getResources());
         DLog.i("context getResources: " + context.getResources());
-        super.attachBaseContext(context);
+        PluginContext pluginContext = new PluginContext(context,sResources,sApplicationInfo,sClassLoader);
+        super.attachBaseContext(pluginContext);
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        DLog.i("PluginActivity.this.getResources: " + PluginActivity.this.getResources());
         Intent intent = getIntent();
         String plugin = intent.getStringExtra("Plugin");
         ActivityInfo activityInfo = intent.getParcelableExtra("ActivityInfo");
@@ -55,22 +55,21 @@ public class PluginActivity extends AppCompatActivity {
 //        getApplicationInfo().theme
     }
 
-    @Override
-    public Resources getResources() {
-        if (sResources != null) {
-            return sResources;
-        }
-        return super.getResources();
-    }
+//    @Override
+//    public Resources getResources() {
+//        if (sResources != null) {
+//            return sResources;
+//        }
+//        return super.getResources();
+//    }
 
-    @Override
-    public ApplicationInfo getApplicationInfo() {
-        DLog.i("getApplicationInfo: " + sApplicationInfo);
-        if(sApplicationInfo != null){
-            return sApplicationInfo;
-        }
-        return super.getApplicationInfo();
-    }
+//    @Override
+//    public ApplicationInfo getApplicationInfo() {
+//        if(sApplicationInfo != null){
+//            return sApplicationInfo;
+//        }
+//        return super.getApplicationInfo();
+//    }
 
 //    @Override
 //    public Resources.Theme getTheme() {
