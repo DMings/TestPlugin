@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import com.dming.simple.PluginActivity;
-import com.dming.testndk.TestActivity;
+import com.dming.testndk.two.TwoActivity;
 
 public class OneActivity extends PluginActivity {
 
@@ -21,7 +21,7 @@ public class OneActivity extends PluginActivity {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(OneActivity.this, TestActivity.class));
+                startActivity(new Intent(OneActivity.this, TwoActivity.class));
             }
         });
     }

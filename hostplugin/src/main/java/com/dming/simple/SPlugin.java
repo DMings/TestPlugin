@@ -7,6 +7,7 @@ import android.content.pm.*;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Looper;
+import com.dming.simple.plugin.activity.ActPitEvent;
 import com.dming.simple.plugin.activity.ActPlugin;
 import com.dming.simple.utils.DLog;
 import com.dming.simple.utils.FileUtils;
@@ -93,7 +94,6 @@ public class SPlugin {
                     try {
                         File apkFile = pluginRunnable.getApkFile();
                         dealPlugin(context, apkFile);
-                        ActPlugin.initActivityPlugin(context, apkFile);
                         setLoadPlugin(true);
                     } catch (Exception e) {
                         setLoadPlugin(false);
@@ -120,7 +120,7 @@ public class SPlugin {
         Class<?> clazz = null;
 //        DLog.e("loadClass className: " + className);
         if (mPlugClassLoader != null) {
-            String activity = ActPlugin.solveActClass(className);
+            String activity = ActPlugin.getInstance().solveActClass(className);
             try {
                 if (activity != null) {
                     clazz = mPlugClassLoader.loadPluginClass(activity);
@@ -155,7 +155,7 @@ public class SPlugin {
         if (pInfo != null) {
             ApplicationInfo appInfo = pInfo.applicationInfo;
             DLog.i("Host appInfo theme>" + Integer.toHexString(appInfo.theme));
-            ActPlugin.obtainHostActivity(pInfo);
+            ActPlugin.getInstance().obtainHostActivity(pInfo);
             ServiceInfo[] services = pInfo.services;
             for (ServiceInfo serviceInfo : services) {
                 DLog.i("Host ServiceInfo>" + serviceInfo.name + " packageName: " + serviceInfo.packageName);
@@ -186,12 +186,12 @@ public class SPlugin {
                 Field applicationInfo = pluginClass.getDeclaredField("sApplicationInfo");
                 Field theme = pluginClass.getDeclaredField("sTheme");
                 Field classLoader = pluginClass.getDeclaredField("sClassLoader");
-//                Field iActPitEvent = pluginClass.getDeclaredField("sActPitEvent");
+                Field actPitEvent = pluginClass.getDeclaredField("sActPitEvent");
                 resources.set(null, resource);
                 applicationInfo.set(null, appInfo);
                 theme.set(null, resource.newTheme());
                 classLoader.set(null, mPlugClassLoader);
-//                iActPitEvent.set(null,ActPlugin.sPitActEvent);
+                actPitEvent.set(null,ActPitEvent.getInstance());
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (NoSuchFieldException e) {
@@ -200,9 +200,11 @@ public class SPlugin {
                 e.printStackTrace();
             } catch (PackageManager.NameNotFoundException e) {
 
+            }catch (Exception e){
+                e.printStackTrace();
             }
             DLog.i("Plugin appInfo theme>" + Integer.toHexString(appInfo.theme));
-            ActPlugin.obtainPluginActivity(pInfo);
+            ActPlugin.getInstance().obtainPluginActivity(pInfo);
 
             ServiceInfo[] services = pInfo.services;
             for (ServiceInfo serviceInfo : services) {

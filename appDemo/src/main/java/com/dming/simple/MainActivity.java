@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.setComponent(cn);
                 intent.putExtra("Plugin","xxxxxxxx");
 //                intent.putExtra("","");
-                ActPlugin.startActivity(MainActivity.this, intent,-1,null);
+                ActPlugin.getInstance().startActivity(MainActivity.this, intent,-1,null);
             }
         });
     }
