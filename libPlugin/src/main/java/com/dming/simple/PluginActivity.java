@@ -14,7 +14,7 @@ import com.dming.simple.utils.DLog;
 public class PluginActivity extends AppCompatActivity {
 
     static {
-        DLog.i("PluginActivity getClassLoader: " + PluginActivity.class.getClass().getClassLoader());
+        DLog.i("PluginActivity getClassLoader: " + PluginActivity.class.getClassLoader());
     }
 
     public static Resources sResources;
@@ -27,6 +27,7 @@ public class PluginActivity extends AppCompatActivity {
     protected void attachBaseContext(Context context) {
         DLog.i("context getResources: " + context.getResources());
         PluginContext pluginContext = new PluginContext(context,sResources,sApplicationInfo,sClassLoader);
+        DLog.i("PluginActivity getClassLoader-: " + PluginActivity.class.getClassLoader());
         super.attachBaseContext(pluginContext);
     }
 
@@ -81,4 +82,9 @@ public class PluginActivity extends AppCompatActivity {
 //    }
 
 
+    @Override
+    public ClassLoader getClassLoader() {
+        DLog.i("P getClassLoader--->");
+        return super.getClassLoader();
+    }
 }

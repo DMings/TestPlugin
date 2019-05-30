@@ -20,7 +20,7 @@ public class FClassLoader extends DexClassLoader {
 
     @Override
     protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-//        DLog.e("FClassLoader: "+name);
+        DLog.e("FClassLoader: "+name);
         return super.loadClass(name, resolve);
     }
 }

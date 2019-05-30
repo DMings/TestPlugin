@@ -180,7 +180,8 @@ public class SPlugin {
             //
             try {
                 Resources resource = packageManager.getResourcesForApplication(appInfo);
-                Class<?> pluginClass = Class.forName("com.dming.simple.PluginActivity", true, mPlugClassLoader);
+//                Class<?> pluginClass = Class.forName("com.dming.simple.PluginActivity", true, mPlugClassLoader);
+                Class<?> pluginClass = mPlugClassLoader.loadClass("com.dming.simple.PluginActivity");
                 Field resources = pluginClass.getDeclaredField("sResources");
                 Field applicationInfo = pluginClass.getDeclaredField("sApplicationInfo");
                 Field theme = pluginClass.getDeclaredField("sTheme");
