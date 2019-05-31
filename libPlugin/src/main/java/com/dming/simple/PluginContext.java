@@ -205,7 +205,7 @@ public class PluginContext extends ContextThemeWrapper {
     public ClassLoader getClassLoader() {
         DLog.i("getClassLoader--->");
         if (mClassLoader != null) {
-            return mClassLoader;
+            return mClassLoader.getParent();
         }
         return super.getClassLoader();
     }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">hostPlugin</string>
+    <string name="app_nameXXX">plugin</string>
+    <string name="test">pluginx</string>
 </resources>

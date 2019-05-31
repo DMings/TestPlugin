@@ -120,6 +120,7 @@ public class RePluginClassLoader extends PathClassLoader {
 
     @Override
     protected Class<?> loadClass(String className, boolean resolve) throws ClassNotFoundException {
+        DLog.e("h--------------->");
         Class<?> c = null;
 
         c = SPlugin.getInstance().loadClass(className, resolve);
@@ -140,6 +141,7 @@ public class RePluginClassLoader extends PathClassLoader {
 
     @Override
     protected Class<?> findClass(String className) throws ClassNotFoundException {
+        DLog.e("RePluginClassLoader findClass: "+className);
         return super.findClass(className);
     }
 

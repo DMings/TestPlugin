@@ -14,13 +14,19 @@ public class FClassLoader extends DexClassLoader {
         if (c == null) {
             c = findClass(name);
         }
-        DLog.e("loadPluginClass className: " + name);
+//        DLog.e("loadPluginClass className: " + name);
         return c;
     }
 
     @Override
     protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-        DLog.e("FClassLoader: "+name);
+//
         return super.loadClass(name, resolve);
+    }
+
+    @Override
+    protected Class<?> findClass(String name) throws ClassNotFoundException {
+        DLog.e("FClassLoader findClass: "+name);
+        return super.findClass(name);
     }
 }
