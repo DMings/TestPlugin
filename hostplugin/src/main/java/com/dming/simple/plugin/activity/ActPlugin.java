@@ -10,7 +10,6 @@ import com.dming.simple.SPlugin;
 import com.dming.simple.utils.DLog;
 import com.dming.simple.utils.SToast;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +17,7 @@ public class ActPlugin {
 
     public HashMap<String, String> sHostActMap = new HashMap<>();
     private HashMap<String, ActivityInfo> sPluginActMap = new HashMap<>();
-    private String PLUGIN_START_NAME = "com.dming.simple.Activity";
+    public static final String PLUGIN_START_NAME = "com.dming.simple.Activity";
     public String sPackageName;
 
     private static volatile ActPlugin sActPlugin;

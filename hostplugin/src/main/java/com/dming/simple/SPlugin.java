@@ -20,7 +20,7 @@ import java.lang.reflect.Field;
 public class SPlugin {
 
     private static volatile SPlugin sSPlugin;
-    public FClassLoader mPlugClassLoader;
+    public FClassLoader mFClassLoader;
     private boolean mPatchClassLoader = false;
     private boolean mLoadPlugin = false;
 
@@ -116,19 +116,13 @@ public class SPlugin {
     }
 
 
-    Class<?> loadClass(String className, boolean resolve) {
+    Class<?> loadClass(String className, boolean resolve) throws ClassNotFoundException {
         Class<?> clazz = null;
 //        DLog.e("loadClass className: " + className);
-        if (mPlugClassLoader != null) {
+        if (mFClassLoader != null) {
             String activity = ActPlugin.getInstance().solveActClass(className);
-            try {
-                if (activity != null) {
-                    clazz = mPlugClassLoader.loadPluginClass(activity);
-                } else {
-                    clazz = mPlugClassLoader.loadPluginClass(className);
-                }
-            } catch (ClassNotFoundException e) {
-//                DLog.i("className: "+className + " Not find!");
+            if (activity != null) {
+                clazz = mFClassLoader.loadClass(activity);
             }
         }
         return clazz;
@@ -137,12 +131,11 @@ public class SPlugin {
     private void dealPlugin(Context context, File apkFile) throws PackageManager.NameNotFoundException, IOException {
         File ndkOutputDir = dealSo(context, apkFile);
         File dexOutputDir = context.getDir("dex", Activity.MODE_PRIVATE);
-        FClassLoader classLoader = new FClassLoader(apkFile.getAbsolutePath(),// dexPath
+        mFClassLoader= new FClassLoader(apkFile.getAbsolutePath(),// dexPath
                 dexOutputDir.getAbsolutePath(),// optimizedDirectory
                 ndkOutputDir.getAbsolutePath(),
-                context.getClassLoader()
+                context.getClassLoader().getParent()
         );
-        mPlugClassLoader = classLoader;
         dealHostPkgInfo(context);
         dealPluginPkgInfo(context, apkFile);
     }
@@ -181,7 +174,7 @@ public class SPlugin {
             try {
                 Resources resource = packageManager.getResourcesForApplication(appInfo);
 //                Class<?> pluginClass = Class.forName("com.dming.simple.PluginActivity", true, mPlugClassLoader);
-                Class<?> pluginClass = mPlugClassLoader.loadClass("com.dming.simple.PluginActivity");
+                Class<?> pluginClass = mFClassLoader.loadClass("com.dming.simple.PluginActivity");
                 Field resources = pluginClass.getDeclaredField("sResources");
                 Field applicationInfo = pluginClass.getDeclaredField("sApplicationInfo");
                 Field theme = pluginClass.getDeclaredField("sTheme");
@@ -190,8 +183,8 @@ public class SPlugin {
                 resources.set(null, resource);
                 applicationInfo.set(null, appInfo);
                 theme.set(null, resource.newTheme());
-                classLoader.set(null, mPlugClassLoader);
-                actPitEvent.set(null,ActPitEvent.getInstance());
+                classLoader.set(null, mFClassLoader);
+                actPitEvent.set(null, ActPitEvent.getInstance());
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (NoSuchFieldException e) {
@@ -200,7 +193,7 @@ public class SPlugin {
                 e.printStackTrace();
             } catch (PackageManager.NameNotFoundException e) {
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             DLog.i("Plugin appInfo theme>" + Integer.toHexString(appInfo.theme));
@@ -213,7 +206,6 @@ public class SPlugin {
             ActivityInfo[] receivers = pInfo.receivers;
             for (ActivityInfo receiverInfo : receivers) {
                 DLog.i("SPlugin ActivityInfo receivers>" + receiverInfo.name + " " + receiverInfo.flags);
-//                Class
 //                BroadcastReceiverDispatch.addSubBroadcastReceiver(new SubBroadcastReceiver());
             }
             ProviderInfo[] providers = pInfo.providers;

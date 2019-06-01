@@ -70,7 +70,7 @@ public class PluginContext extends ContextThemeWrapper {
     private final View handleCreateView(String name, Context context, AttributeSet attrs) {
         View v = null;
         try {
-            Class c = mClassLoader.getParent().loadClass(name);
+            Class c = mClassLoader.loadClass(name);
             do{
                 if (c == null) {
                     // 没找到，不管
@@ -205,7 +205,7 @@ public class PluginContext extends ContextThemeWrapper {
     public ClassLoader getClassLoader() {
         DLog.i("getClassLoader--->");
         if (mClassLoader != null) {
-            return mClassLoader.getParent();
+            return mClassLoader;
         }
         return super.getClassLoader();
     }

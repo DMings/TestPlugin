@@ -9,19 +9,32 @@ public class FClassLoader extends DexClassLoader {
         super(dexPath, optimizedDirectory, librarySearchPath, parent);
     }
 
-    public Class<?> loadPluginClass(String name) throws ClassNotFoundException {
-        Class<?> c = findLoadedClass(name);
-        if (c == null) {
-            c = findClass(name);
-        }
-//        DLog.e("loadPluginClass className: " + name);
-        return c;
+    public Class<?> loadPluginWithParantClass(String name) throws ClassNotFoundException {
+        return super.loadClass(name, false);
+    }
+
+    public Class<?> loadPluginWithParantClass(String name, boolean resolve) throws ClassNotFoundException {
+        return super.loadClass(name, resolve);
+    }
+
+    @Override
+    public Class<?> loadClass(String name) throws ClassNotFoundException {
+//        Class<?> c = findLoadedClass(name);
+//        if (c == null) {
+//            c = findClass(name);
+//        }
+//        return c;
+        return super.loadClass(name);
     }
 
     @Override
     protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-//
-        return super.loadClass(name, resolve);
+//        Class<?> c = findLoadedClass(name);
+//        if (c == null) {
+//            c = findClass(name);
+//        }
+//        return c;
+        return super.loadClass(name,resolve);
     }
 
     @Override
