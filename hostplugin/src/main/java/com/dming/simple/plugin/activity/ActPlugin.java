@@ -50,7 +50,7 @@ public class ActPlugin {
         }
     }
 
-    public String getActivityStr() {
+    public String findActivityPit() {
         for (Map.Entry<String, String> entry : sHostActMap.entrySet()) {
             if (TextUtils.isEmpty(entry.getValue())) {
                 return entry.getKey();

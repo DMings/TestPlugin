@@ -6,7 +6,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class TestActivityApp extends AppCompatActivity {
+public class TestHostActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -15,7 +15,7 @@ public class TestActivityApp extends AppCompatActivity {
         findViewById(R.id.btn_test).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(TestActivityApp.this,TestActivityApp.this.getString(R.string.test_toast),Toast.LENGTH_SHORT).show();
+                Toast.makeText(TestHostActivity.this, TestHostActivity.this.getString(R.string.test_toast),Toast.LENGTH_SHORT).show();
             }
         });
     }

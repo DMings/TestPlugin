@@ -7,7 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
-import com.dming.simple.PluginActivity;
+import com.dming.simple.plugin.activity.PluginActivity;
 import com.dming.testndk.one.OneActivity;
 
 public class TestNDKActivity extends PluginActivity {

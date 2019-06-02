@@ -9,18 +9,21 @@ import android.os.Handler;
 import android.os.Looper;
 import com.dming.simple.plugin.activity.ActPitEvent;
 import com.dming.simple.plugin.activity.ActPlugin;
+import com.dming.simple.plugin.service.ServicePlugin;
 import com.dming.simple.utils.DLog;
 import com.dming.simple.utils.FileUtils;
+import dalvik.system.DexClassLoader;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 
 public class SPlugin {
 
     private static volatile SPlugin sSPlugin;
-    public FClassLoader mFClassLoader;
+    public ClassLoader mClassLoader;
     private boolean mPatchClassLoader = false;
     private boolean mLoadPlugin = false;
 
@@ -119,19 +122,26 @@ public class SPlugin {
     Class<?> loadClass(String className, boolean resolve) throws ClassNotFoundException {
         Class<?> clazz = null;
 //        DLog.e("loadClass className: " + className);
-        if (mFClassLoader != null) {
+        if (mClassLoader != null) {
             String activity = ActPlugin.getInstance().solveActClass(className);
             if (activity != null) {
-                clazz = mFClassLoader.loadClass(activity);
+                clazz = mClassLoader.loadClass(activity);
+            } else {
+                String service = ServicePlugin.getInstance().solveServiceClass(className);
+                if (service != null) {
+                    clazz = mClassLoader.loadClass(service);
+                }
             }
         }
         return clazz;
     }
 
-    private void dealPlugin(Context context, File apkFile) throws PackageManager.NameNotFoundException, IOException {
+    private void dealPlugin(Context context, File apkFile) throws PackageManager.NameNotFoundException,
+            ClassNotFoundException, NoSuchMethodException,
+            InvocationTargetException, IllegalAccessException, NoSuchFieldException {
         File ndkOutputDir = dealSo(context, apkFile);
         File dexOutputDir = context.getDir("dex", Activity.MODE_PRIVATE);
-        mFClassLoader= new FClassLoader(apkFile.getAbsolutePath(),// dexPath
+        mClassLoader = new DexClassLoader(apkFile.getAbsolutePath(),// dexPath
                 dexOutputDir.getAbsolutePath(),// optimizedDirectory
                 ndkOutputDir.getAbsolutePath(),
                 context.getClassLoader().getParent()
@@ -149,14 +159,13 @@ public class SPlugin {
             ApplicationInfo appInfo = pInfo.applicationInfo;
             DLog.i("Host appInfo theme>" + Integer.toHexString(appInfo.theme));
             ActPlugin.getInstance().obtainHostActivity(pInfo);
-            ServiceInfo[] services = pInfo.services;
-            for (ServiceInfo serviceInfo : services) {
-                DLog.i("Host ServiceInfo>" + serviceInfo.name + " packageName: " + serviceInfo.packageName);
-            }
+            ServicePlugin.getInstance().obtainHostService(pInfo);
         }
     }
 
-    private void dealPluginPkgInfo(Context context, File apkFile) {
+    private void dealPluginPkgInfo(Context context, File apkFile) throws ClassNotFoundException,
+            PackageManager.NameNotFoundException, NoSuchFieldException,
+            NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         String apkPath = apkFile.getAbsolutePath();
         long time = System.currentTimeMillis();
         PackageManager packageManager = context.getPackageManager();
@@ -170,39 +179,19 @@ public class SPlugin {
             ApplicationInfo appInfo = pInfo.applicationInfo;
             appInfo.sourceDir = apkPath;
             appInfo.publicSourceDir = apkPath;
-            //
-            try {
-                Resources resource = packageManager.getResourcesForApplication(appInfo);
-//                Class<?> pluginClass = Class.forName("com.dming.simple.PluginActivity", true, mPlugClassLoader);
-                Class<?> pluginClass = mFClassLoader.loadClass("com.dming.simple.PluginActivity");
-                Field resources = pluginClass.getDeclaredField("sResources");
-                Field applicationInfo = pluginClass.getDeclaredField("sApplicationInfo");
-                Field theme = pluginClass.getDeclaredField("sTheme");
-                Field classLoader = pluginClass.getDeclaredField("sClassLoader");
-                Field actPitEvent = pluginClass.getDeclaredField("sActPitEvent");
-                resources.set(null, resource);
-                applicationInfo.set(null, appInfo);
-                theme.set(null, resource.newTheme());
-                classLoader.set(null, mFClassLoader);
-                actPitEvent.set(null, ActPitEvent.getInstance());
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (PackageManager.NameNotFoundException e) {
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            Resources resource = packageManager.getResourcesForApplication(appInfo);
+            Class<?> pluginClass = mClassLoader.loadClass("com.dming.simple.PluginManager");
+            Field resources = pluginClass.getDeclaredField("sResources");
+            Field applicationInfo = pluginClass.getDeclaredField("sApplicationInfo");
+            Field classLoader = pluginClass.getDeclaredField("sClassLoader");
+            pluginClass.getDeclaredMethod("setActPicEvent", Object.class).invoke(null, ActPitEvent.getInstance());
+            resources.set(null, resource);
+            applicationInfo.set(null, appInfo);
+            classLoader.set(null, mClassLoader);
             DLog.i("Plugin appInfo theme>" + Integer.toHexString(appInfo.theme));
             ActPlugin.getInstance().obtainPluginActivity(pInfo);
+            ServicePlugin.getInstance().obtainPluginService(pInfo);
 
-            ServiceInfo[] services = pInfo.services;
-            for (ServiceInfo serviceInfo : services) {
-                DLog.i("SPlugin ServiceInfo>" + serviceInfo.name + " " + serviceInfo.flags);
-            }
             ActivityInfo[] receivers = pInfo.receivers;
             for (ActivityInfo receiverInfo : receivers) {
                 DLog.i("SPlugin ActivityInfo receivers>" + receiverInfo.name + " " + receiverInfo.flags);
