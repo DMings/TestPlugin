@@ -24,6 +24,7 @@
         <activity android:name=".one.OneActivity" android:theme="@style/AppTheme" />
         <activity android:name=".two.TwoActivity" />
         <activity android:name=".TestActivity"/>
+        <service android:name=".TestService"/>
 
         <receiver android:name=".TestBroadcastReceiver"/>
         <service android:name=".TestService" />

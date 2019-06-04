@@ -22,11 +22,13 @@ public class PluginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        Intent intent = getIntent();
-        ActivityInfo activityInfo = intent.getParcelableExtra("ActivityInfo");
-        setTheme(activityInfo != null && activityInfo.theme != 0 ? activityInfo.theme : getApplicationInfo().theme);
-        if(activityInfo != null){
-            DLog.i("activityInfo.theme: "+activityInfo.theme);
+        if (PluginManager.sClassLoader != null) {
+            Intent intent = getIntent();
+            ActivityInfo activityInfo = intent.getParcelableExtra("ActivityInfo");
+            setTheme(activityInfo != null && activityInfo.theme != 0 ? activityInfo.theme : getApplicationInfo().theme);
+            if (activityInfo != null) {
+                DLog.i("activityInfo.theme: " + activityInfo.theme);
+            }
         }
         super.onCreate(savedInstanceState);
     }
@@ -34,12 +36,16 @@ public class PluginActivity extends AppCompatActivity {
     @SuppressLint("ObsoleteSdkInt")
     @Override
     public void startActivityForResult(Intent intent, int requestCode, Bundle options) {
-        if (PluginManager.startActivityForResult(intent, requestCode, options)) {
-            if (Build.VERSION.SDK_INT >= 16) {
-                super.startActivityForResult(intent, requestCode, options);
-            } else {
-                super.startActivityForResult(intent, requestCode);
+        if (PluginManager.sClassLoader != null) {
+            if (PluginManager.startActivityForResult(intent, requestCode, options)) {
+                if (Build.VERSION.SDK_INT >= 16) {
+                    super.startActivityForResult(intent, requestCode, options);
+                } else {
+                    super.startActivityForResult(intent, requestCode);
+                }
             }
+        } else {
+            super.startActivityForResult(intent, requestCode, options);
         }
     }
 

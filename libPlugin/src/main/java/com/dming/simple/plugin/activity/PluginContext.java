@@ -31,7 +31,7 @@ public class PluginContext extends ContextThemeWrapper {
 
     @Override
     public Object getSystemService(String name) {
-        if (LAYOUT_INFLATER_SERVICE.equals(name)) {
+        if (LAYOUT_INFLATER_SERVICE.equals(name) && mClassLoader != null) {
             if (mInflater == null) {
                 LayoutInflater inflater = (LayoutInflater) super.getSystemService(name);
                 // 新建一个，设置其工厂

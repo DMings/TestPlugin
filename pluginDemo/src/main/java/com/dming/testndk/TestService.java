@@ -28,7 +28,14 @@ public class TestService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
+        Log.i("DMUI", "TestService onBind");
         return mMessenger.getBinder();
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        Log.i("DMUI", "TestService onUnbind");
+        return super.onUnbind(intent);
     }
 
     @Override
