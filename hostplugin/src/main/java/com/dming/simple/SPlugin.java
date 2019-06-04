@@ -127,7 +127,7 @@ public class SPlugin {
             if (activity != null) {
                 clazz = mClassLoader.loadClass(activity);
             } else {
-                String service = ServicePlugin.getInstance().solveServiceClass(className);
+                String service = ServicePlugin.solveServiceClass(className);
                 if (service != null) {
                     clazz = mClassLoader.loadClass(service);
                 }
@@ -159,7 +159,7 @@ public class SPlugin {
             ApplicationInfo appInfo = pInfo.applicationInfo;
             DLog.i("Host appInfo theme>" + Integer.toHexString(appInfo.theme));
             ActPlugin.getInstance().obtainHostActivity(pInfo);
-            ServicePlugin.getInstance().obtainHostService(pInfo);
+            ServicePlugin.obtainHostService(pInfo);
         }
     }
 
@@ -190,7 +190,7 @@ public class SPlugin {
             classLoader.set(null, mClassLoader);
             DLog.i("Plugin appInfo theme>" + Integer.toHexString(appInfo.theme));
             ActPlugin.getInstance().obtainPluginActivity(pInfo);
-            ServicePlugin.getInstance().obtainPluginService(pInfo);
+            ServicePlugin.obtainPluginService(pInfo);
 
             ActivityInfo[] receivers = pInfo.receivers;
             for (ActivityInfo receiverInfo : receivers) {

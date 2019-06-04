@@ -21,7 +21,7 @@
 
     <Button
             android:id="@+id/btn_plugin_act"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="StartPluginActivity"
@@ -33,19 +33,43 @@
 
     <Button
             android:id="@+id/btn_plugin_start_service"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="StartPluginService"
             android:textAllCaps="false"
-            app:layout_constraintBottom_toTopOf="@+id/btn_plugin_stop_service"
+            app:layout_constraintBottom_toTopOf="@+id/btn_plugin_bind_service"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_plugin_act"/>
 
     <Button
+            android:id="@+id/btn_plugin_bind_service"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BindPluginService"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toTopOf="@+id/btn_plugin_unbind_service"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_plugin_start_service"/>
+
+    <Button
+            android:id="@+id/btn_plugin_unbind_service"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="UnbindPluginService"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toTopOf="@+id/btn_plugin_stop_service"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_plugin_bind_service"/>
+
+    <Button
             android:id="@+id/btn_plugin_stop_service"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="StopPluginService"
@@ -53,6 +77,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_plugin_start_service"/>
+            app:layout_constraintTop_toBottomOf="@+id/btn_plugin_unbind_service"/>
 
 </android.support.constraint.ConstraintLayout>

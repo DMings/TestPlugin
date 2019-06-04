@@ -1,14 +1,17 @@
 package com.dming.simple;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+import android.content.ServiceConnection;
+import android.os.*;
 import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.dming.simple.plugin.activity.ActPlugin;
 import com.dming.simple.plugin.service.ServicePlugin;
+import com.dming.simple.utils.DLog;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -19,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if(!b){
+        if (!b) {
             b = true;
             SPlugin.initPlugin(this, "NDK_1.0.4.apk", new OnPluginInitListener() {
                 @Override
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 ComponentName cn = new ComponentName(MainActivity.this.getPackageName(), "com.dming.testndk.TestNDKActivity");
                 intent.setComponent(cn);
-                ActPlugin.getInstance().startActivity(MainActivity.this, intent,-1,null);
+                ActPlugin.getInstance().startActivity(MainActivity.this, intent, -1, null);
             }
         });
 
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 ComponentName cn = new ComponentName(MainActivity.this.getPackageName(), "com.dming.testndk.TestService");
                 intent.setComponent(cn);
-                ServicePlugin.getInstance().startService(MainActivity.this, intent);
+                ServicePlugin.startService(MainActivity.this, intent);
             }
         });
 
@@ -67,14 +70,47 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 ComponentName cn = new ComponentName(MainActivity.this.getPackageName(), "com.dming.testndk.TestService");
                 intent.setComponent(cn);
-                ServicePlugin.getInstance().stopService(MainActivity.this, intent);
-//                bindService()
-//                unbindService();
+                ServicePlugin.stopService(MainActivity.this, intent);
+            }
+        });
+
+        findViewById(R.id.btn_plugin_bind_service).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                ComponentName cn = new ComponentName(MainActivity.this.getPackageName(), "com.dming.testndk.TestService");
+                intent.setComponent(cn);
+                ServicePlugin.bindService(MainActivity.this, intent,mConnection, Context.BIND_ABOVE_CLIENT);
+            }
+        });
+
+        findViewById(R.id.btn_plugin_unbind_service).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ServicePlugin.unbindService(MainActivity.this, mConnection);
             }
         });
 
     }
 
+    private ServiceConnection mConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            Messenger mService = new Messenger(service);
+            try {
+                Message message = new Message();
+                message.what = 911;
+                mService.send(message);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            DLog.i("onServiceConnected: " + className);
+        }
 
+        public void onServiceDisconnected(ComponentName componentName) {
+            DLog.i("onServiceDisconnected: " + componentName.getClassName());
+            ServicePlugin.clearServicePit(componentName.getClassName());
+        }
+
+    };
 }
 

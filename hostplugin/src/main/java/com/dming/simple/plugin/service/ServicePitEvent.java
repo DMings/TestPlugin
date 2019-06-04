@@ -3,58 +3,65 @@ package com.dming.simple.plugin.service;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.ServiceInfo;
+import android.text.TextUtils;
 import com.dming.simple.utils.DLog;
 
 public class ServicePitEvent {
 
-    private static volatile ServicePitEvent sActPitEvent;
+//    private static volatile ServicePitEvent sActPitEvent;
+//
+//    public static ServicePitEvent getInstance() {
+//        if (sActPitEvent == null) {
+//            synchronized (ServicePitEvent.class) {
+//                if (sActPitEvent == null) {
+//                    sActPitEvent = new ServicePitEvent();
+//                }
+//            }
+//        }
+//        return sActPitEvent;
+//    }
 
-    public static ServicePitEvent getInstance() {
-        if (sActPitEvent == null) {
-            synchronized (ServicePitEvent.class) {
-                if (sActPitEvent == null) {
-                    sActPitEvent = new ServicePitEvent();
-                }
-            }
-        }
-        return sActPitEvent;
-    }
-
-    public boolean startService(Intent intent) {
-        ServicePlugin servicePlugin = ServicePlugin.getInstance();
-        if (intent.getComponent() != null && servicePlugin.sPackageName != null) {
+    public static boolean startService(Intent intent) {
+        if (intent.getComponent() != null && ServicePlugin.sPackageName != null) {
             String serviceName = intent.getComponent().getClassName();
-            String servicePit = servicePlugin.findServicePit();
+            String servicePit = ServicePlugin.findServicePit();
             DLog.i("startService servicePit: " + servicePit + " serviceName: " + serviceName);
             if (servicePit == null) {
                 return false;
             }
-            servicePlugin.sHostServiceMap.put(servicePit, serviceName);
-            intent.setClassName(servicePlugin.sPackageName, servicePit);
-            ServiceInfo serviceInfo = servicePlugin.getPluginServiceInfo(serviceName);
+            ServicePlugin.sHostServiceMap.put(servicePit, serviceName);
+            intent.setClassName(ServicePlugin.sPackageName, servicePit);
+            ServiceInfo serviceInfo = ServicePlugin.getPluginServiceInfo(serviceName);
             intent.putExtra("ServiceInfo", serviceInfo);
             return true;
         }
         return false;
     }
 
-    public boolean bindService(Intent service, ServiceConnection conn, int flags) {
-        return false;
-    }
-
-    public boolean unbindService(ServiceConnection conn) {
-        return false;
-    }
-
-    public boolean stopService(Intent intent) {
-        ServicePlugin servicePlugin = ServicePlugin.getInstance();
-        if (intent.getComponent() != null && servicePlugin.sPackageName != null) {
+    public static boolean bindService(Intent intent, ServiceConnection conn, int flags) {
+        if (intent.getComponent() != null && ServicePlugin.sPackageName != null) {
             String pluginName = intent.getComponent().getClassName();
-            String hostName = servicePlugin.findPluginService(pluginName);
-            intent.setClassName(servicePlugin.sPackageName, hostName);
+            String hostName = ServicePlugin.findPluginService(pluginName);
+            if(hostName == null)return false;
+            intent.setClassName(ServicePlugin.sPackageName, hostName);
+            return true;
         }
         return false;
     }
 
+    public static boolean unbindService(ServiceConnection conn) {
+        return true;
+    }
+
+    public static boolean stopService(Intent intent) {
+        if (intent.getComponent() != null && ServicePlugin.sPackageName != null) {
+            String pluginName = intent.getComponent().getClassName();
+            String hostName = ServicePlugin.findPluginService(pluginName);
+            if(hostName == null)return false;
+            intent.setClassName(ServicePlugin.sPackageName, hostName);
+            return true;
+        }
+        return false;
+    }
 
 }
