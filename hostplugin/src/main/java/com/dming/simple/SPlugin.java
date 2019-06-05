@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import com.dming.simple.plugin.activity.ActPitEvent;
 import com.dming.simple.plugin.activity.ActPlugin;
+import com.dming.simple.plugin.service.ServicePitEvent;
 import com.dming.simple.plugin.service.ServicePlugin;
 import com.dming.simple.utils.DLog;
 import com.dming.simple.utils.FileUtils;
@@ -184,7 +185,8 @@ public class SPlugin {
             Field resources = pluginClass.getDeclaredField("sResources");
             Field applicationInfo = pluginClass.getDeclaredField("sApplicationInfo");
             Field classLoader = pluginClass.getDeclaredField("sClassLoader");
-            pluginClass.getDeclaredMethod("setActPicEvent", Object.class).invoke(null, ActPitEvent.getInstance());
+            pluginClass.getDeclaredMethod("setPicEvent", Object.class,Object.class)
+                    .invoke(null, ActPitEvent.getInstance(), ServicePitEvent.getInstance());
             resources.set(null, resource);
             applicationInfo.set(null, appInfo);
             classLoader.set(null, mClassLoader);

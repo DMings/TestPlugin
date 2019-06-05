@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         if (!b) {
             b = true;
-            SPlugin.initPlugin(this, "NDK_1.0.4.apk", new OnPluginInitListener() {
+            SPlugin.initPlugin(this, "NDK_1.0.5.apk", new OnPluginInitListener() {
                 @Override
                 public void onSuccess() {
                     Toast.makeText(MainActivity.this, "插件加载成功", Toast.LENGTH_SHORT).show();

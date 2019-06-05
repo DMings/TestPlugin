@@ -50,7 +50,12 @@ public class ActPlugin {
         }
     }
 
-    public String findActivityPit() {
+    public String findActivityPit(String actName) {
+        for (Map.Entry<String, String> entry : sHostActMap.entrySet()) {
+            if (actName.equals(entry.getValue())) {  // 找到旧坑
+                return entry.getKey();
+            }
+        }
         for (Map.Entry<String, String> entry : sHostActMap.entrySet()) {
             if (TextUtils.isEmpty(entry.getValue())) {
                 return entry.getKey();

@@ -1,7 +1,10 @@
 package com.dming.simple.plugin.activity;
 
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.ApplicationInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
@@ -10,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
 import androidx.appcompat.view.ContextThemeWrapper;
-import com.dming.simple.utils.DLog;
+import com.dming.simple.PluginManager;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -22,11 +25,11 @@ public class PluginContext extends ContextThemeWrapper {
     private ClassLoader mClassLoader;
     private LayoutInflater mInflater;
 
-    public PluginContext(Context base, Resources resources, ApplicationInfo applicationInfo, ClassLoader classLoader) {
+    public PluginContext(Context base) {
         super(base, android.R.style.Theme);
-        this.mResources = resources;
-        this.mApplicationInfo = applicationInfo;
-        this.mClassLoader = classLoader;
+        this.mResources = PluginManager.sResources;
+        this.mApplicationInfo = PluginManager.sApplicationInfo;
+        this.mClassLoader = PluginManager.sClassLoader;
     }
 
     @Override
@@ -60,7 +63,7 @@ public class PluginContext extends ContextThemeWrapper {
         View v = null;
         try {
             Class c = mClassLoader.loadClass(name);
-            do{
+            do {
                 if (c == null) {
                     // 没找到，不管
                     break;
@@ -75,7 +78,7 @@ public class PluginContext extends ContextThemeWrapper {
                 }
                 Constructor<?> construct = c.getConstructor(Context.class, AttributeSet.class);
                 v = (View) construct.newInstance(context, attrs);
-            }while (false);
+            } while (false);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
@@ -117,10 +120,41 @@ public class PluginContext extends ContextThemeWrapper {
 
     @Override
     public ClassLoader getClassLoader() {
-        DLog.i("getClassLoader--->");
         if (mClassLoader != null) {
             return mClassLoader;
         }
         return super.getClassLoader();
+    }
+
+    @Override
+    public ComponentName startService(Intent service) {
+        if (mClassLoader != null) {
+            PluginManager.startService(service);
+        }
+        return super.startService(service);
+    }
+
+    @Override
+    public boolean bindService(Intent service, ServiceConnection conn, int flags) {
+        if (mClassLoader != null) {
+            PluginManager.bindService(service,conn,flags);
+        }
+        return super.bindService(service, conn, flags);
+    }
+
+    @Override
+    public void unbindService(ServiceConnection conn) {
+        if (mClassLoader != null) {
+            PluginManager.unbindService(conn);
+        }
+        super.unbindService(conn);
+    }
+
+    @Override
+    public boolean stopService(Intent name) {
+        if (mClassLoader != null) {
+            PluginManager.stopService(name);
+        }
+        return super.stopService(name);
     }
 }

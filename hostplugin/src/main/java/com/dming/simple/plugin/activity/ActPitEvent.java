@@ -24,7 +24,7 @@ public class ActPitEvent {
         ActPlugin actPlugin = ActPlugin.getInstance();
         if (intent.getComponent() != null && actPlugin.sPackageName != null) {
             String activityName = intent.getComponent().getClassName();
-            String activityPit = actPlugin.findActivityPit();
+            String activityPit = actPlugin.findActivityPit(activityName);
             DLog.i("startActivityForResult activityPit: " + activityPit + " activityName: " + activityName);
             if (activityPit == null) {
                 return false;

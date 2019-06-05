@@ -6,25 +6,27 @@ import android.content.pm.ServiceInfo;
 import android.text.TextUtils;
 import com.dming.simple.utils.DLog;
 
+import java.util.Map;
+
 public class ServicePitEvent {
 
-//    private static volatile ServicePitEvent sActPitEvent;
-//
-//    public static ServicePitEvent getInstance() {
-//        if (sActPitEvent == null) {
-//            synchronized (ServicePitEvent.class) {
-//                if (sActPitEvent == null) {
-//                    sActPitEvent = new ServicePitEvent();
-//                }
-//            }
-//        }
-//        return sActPitEvent;
-//    }
+    private volatile static ServicePitEvent sActPitEvent;
 
-    public static boolean startService(Intent intent) {
+    public static ServicePitEvent getInstance() {
+        if (sActPitEvent == null) {
+            synchronized (ServicePitEvent.class) {
+                if (sActPitEvent == null) {
+                    sActPitEvent = new ServicePitEvent();
+                }
+            }
+        }
+        return sActPitEvent;
+    }
+
+    public boolean startService(Intent intent) {
         if (intent.getComponent() != null && ServicePlugin.sPackageName != null) {
             String serviceName = intent.getComponent().getClassName();
-            String servicePit = ServicePlugin.findServicePit();
+            String servicePit = ServicePlugin.findServicePit(serviceName);
             DLog.i("startService servicePit: " + servicePit + " serviceName: " + serviceName);
             if (servicePit == null) {
                 return false;
@@ -38,7 +40,7 @@ public class ServicePitEvent {
         return false;
     }
 
-    public static boolean bindService(Intent intent, ServiceConnection conn, int flags) {
+    public boolean bindService(Intent intent, ServiceConnection conn, int flags) {
         if (intent.getComponent() != null && ServicePlugin.sPackageName != null) {
             String pluginName = intent.getComponent().getClassName();
             String hostName = ServicePlugin.findPluginService(pluginName);
@@ -49,11 +51,11 @@ public class ServicePitEvent {
         return false;
     }
 
-    public static boolean unbindService(ServiceConnection conn) {
+    public boolean unbindService(ServiceConnection conn) {
         return true;
     }
 
-    public static boolean stopService(Intent intent) {
+    public boolean stopService(Intent intent) {
         if (intent.getComponent() != null && ServicePlugin.sPackageName != null) {
             String pluginName = intent.getComponent().getClassName();
             String hostName = ServicePlugin.findPluginService(pluginName);
@@ -62,6 +64,17 @@ public class ServicePitEvent {
             return true;
         }
         return false;
+    }
+
+    public void clearServicePit(String pluginName){
+        DLog.i("clearServicePit: "+pluginName);
+        if (!TextUtils.isEmpty(pluginName)) {
+            for(Map.Entry<String,String> entry : ServicePlugin.sHostServiceMap.entrySet()){
+                if(pluginName.equals(entry.getValue())){
+                    ServicePlugin.sHostServiceMap.put(entry.getKey(), null); //清除坑位
+                }
+            }
+        }
     }
 
 }

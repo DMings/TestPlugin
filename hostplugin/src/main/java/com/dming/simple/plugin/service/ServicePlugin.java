@@ -20,7 +20,7 @@ public class ServicePlugin {
     private static final String PLUGIN_START_NAME = "com.dming.simple.Service";
     public static String sPackageName;
 
-//    private static volatile ServicePlugin sServicePlugin;
+//    private static volatile ServicePitEvent sServicePitEvent;
 //
 //    public static ServicePlugin getInstance() {
 //        if (sServicePlugin == null) {
@@ -53,7 +53,7 @@ public class ServicePlugin {
         checkPluginLoad(context, new VerifyOperation() {
             @Override
             public boolean check() {
-                boolean b = ServicePitEvent.startService(intent);
+                boolean b = ServicePitEvent.getInstance().startService(intent);
                 if (b && intent.getComponent() != null) {
                     DLog.i("startService pkgName: " + intent.getComponent().getPackageName() + " component: " + intent.getComponent().getClassName());
                     context.startService(intent);
@@ -69,7 +69,7 @@ public class ServicePlugin {
         checkPluginLoad(context, new VerifyOperation() {
             @Override
             public boolean check() {
-                boolean b = ServicePitEvent.bindService(intent,conn,flags);
+                boolean b = ServicePitEvent.getInstance().bindService(intent,conn,flags);
                 if (b && intent.getComponent() != null) {
                     DLog.i("bindService pkgName: " + intent.getComponent().getPackageName() + " component: " + intent.getComponent().getClassName());
                     context.bindService(intent,conn,flags);
@@ -84,7 +84,7 @@ public class ServicePlugin {
         checkPluginLoad(context, new VerifyOperation() {
             @Override
             public boolean check() {
-                boolean b = ServicePitEvent.unbindService(conn);
+                boolean b = ServicePitEvent.getInstance().unbindService(conn);
                 if (b && conn != null) {
                     DLog.i("unbindService ServiceConnection: " + conn.toString());
                     context.unbindService(conn);
@@ -99,7 +99,7 @@ public class ServicePlugin {
         checkPluginLoad(context, new VerifyOperation() {
             @Override
             public boolean check() {
-                boolean b = ServicePitEvent.stopService(intent);
+                boolean b = ServicePitEvent.getInstance().stopService(intent);
                 if (b && intent.getComponent() != null) {
                     DLog.i("stopService pkgName: " + intent.getComponent().getPackageName() + " component: " + intent.getComponent().getClassName());
                     context.stopService(intent);
@@ -110,7 +110,12 @@ public class ServicePlugin {
         });
     }
 
-    public static String findServicePit() {
+    public static String findServicePit(String serviceName) {
+        for (Map.Entry<String, String> entry : sHostServiceMap.entrySet()) {
+            if (serviceName.equals(entry.getValue())) {  // 找到旧坑
+                return entry.getKey();
+            }
+        }
         for (Map.Entry<String, String> entry : sHostServiceMap.entrySet()) {
             if (TextUtils.isEmpty(entry.getValue())) {
                 return entry.getKey();

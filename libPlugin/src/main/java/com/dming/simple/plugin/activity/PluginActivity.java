@@ -1,8 +1,10 @@
 package com.dming.simple.plugin.activity;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,8 +17,7 @@ public class PluginActivity extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context context) {
-        PluginContext pluginContext = new PluginContext(context,
-                PluginManager.sResources, PluginManager.sApplicationInfo, PluginManager.sClassLoader);
+        PluginContext pluginContext = new PluginContext(context);
         super.attachBaseContext(pluginContext);
     }
 
@@ -38,11 +39,7 @@ public class PluginActivity extends AppCompatActivity {
     public void startActivityForResult(Intent intent, int requestCode, Bundle options) {
         if (PluginManager.sClassLoader != null) {
             if (PluginManager.startActivityForResult(intent, requestCode, options)) {
-                if (Build.VERSION.SDK_INT >= 16) {
-                    super.startActivityForResult(intent, requestCode, options);
-                } else {
-                    super.startActivityForResult(intent, requestCode);
-                }
+                super.startActivityForResult(intent, requestCode, options);
             }
         } else {
             super.startActivityForResult(intent, requestCode, options);

@@ -11,10 +11,11 @@ import android.os.Messenger;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
+import com.dming.simple.plugin.service.PluginService;
 import com.dming.simple.utils.DLog;
 
 @SuppressLint("Registered")
-public class TestService extends Service {
+public class TestService extends PluginService {
 
     public final static int MSG_SAY_HELLO = 911;
     private Messenger mMessenger = new Messenger(new IncomingHandler(this));
