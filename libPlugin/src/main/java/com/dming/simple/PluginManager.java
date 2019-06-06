@@ -18,7 +18,7 @@ public class PluginManager {
     private static Object sActPitEvent;
     private static Object sServicePitEvent;
 
-    public static void setPicEvent(Object actObj,Object serviceObj) {
+    public static void setPicEvent(Object actObj, Object serviceObj) {
         sActPitEvent = actObj;
         sServicePitEvent = serviceObj;
         DLog.i("PluginManager.sActPitEvent: " + PluginManager.sActPitEvent.getClass().getClassLoader());
@@ -91,17 +91,15 @@ public class PluginManager {
         return b;
     }
 
-    public static boolean clearServicePit(String name) {
-        boolean b = false;
+    public static void clearServicePit(String name) {
         try {
             Method clearServicePit = PluginManager.sServicePitEvent.getClass()
                     .getDeclaredMethod("clearServicePit", String.class);
-            b = (boolean) clearServicePit.invoke(PluginManager.sServicePitEvent, name);
+            clearServicePit.invoke(PluginManager.sServicePitEvent, name);
         } catch (NoSuchMethodException e) {
         } catch (IllegalAccessException e) {
         } catch (InvocationTargetException e) {
         }
-        return b;
     }
 
 }

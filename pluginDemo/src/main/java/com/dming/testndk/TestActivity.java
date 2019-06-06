@@ -16,20 +16,22 @@ public class TestActivity extends PluginActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        findViewById(R.id.testBtn).setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_service);
+        findViewById(R.id.btn_start).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("DMUI", "TestActivity bindService");
+                startService(new Intent(TestActivity.this, TestService.class));
                 bindService(new Intent(TestActivity.this, TestService.class),serviceConnection , Context.BIND_AUTO_CREATE);
             }
         });
 
-        findViewById(R.id.test_jni).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btn_stop).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("DMUI", "TestActivity unbindService");
                 unbindService(serviceConnection);
+                stopService(new Intent(TestActivity.this, TestService.class));
             }
         });
     }

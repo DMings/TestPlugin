@@ -15,26 +15,13 @@ import java.util.Map;
 
 public class ActPlugin {
 
-    public HashMap<String, String> sHostActMap = new HashMap<>();
-    private HashMap<String, ActivityInfo> sPluginActMap = new HashMap<>();
+    public static HashMap<String, String> sHostActMap = new HashMap<>();
+    private static HashMap<String, ActivityInfo> sPluginActMap = new HashMap<>();
     public static final String PLUGIN_START_NAME = "com.dming.simple.Activity";
-    public String sPackageName;
-
-    private static volatile ActPlugin sActPlugin;
-
-    public static ActPlugin getInstance() {
-        if (sActPlugin == null) {
-            synchronized (ActPlugin.class) {
-                if (sActPlugin == null) {
-                    sActPlugin = new ActPlugin();
-                }
-            }
-        }
-        return sActPlugin;
-    }
+    public static String sPackageName;
 
 
-    public void startActivity(Context context, Intent intent, int requestCode, Bundle options) {
+    public static void startActivity(Context context, Intent intent, int requestCode, Bundle options) {
         if (SPlugin.getInstance().isLoadPlugin()) {
             boolean b = ActPitEvent.getInstance().startActivityForResult(intent, requestCode, options);
             if (b) {
@@ -50,7 +37,7 @@ public class ActPlugin {
         }
     }
 
-    public String findActivityPit(String actName) {
+    public static String findActivityPit(String actName) {
         for (Map.Entry<String, String> entry : sHostActMap.entrySet()) {
             if (actName.equals(entry.getValue())) {  // 找到旧坑
                 return entry.getKey();
@@ -64,7 +51,7 @@ public class ActPlugin {
         return null;
     }
 
-    public String solveActClass(String className) {
+    public static String solveActClass(String className) {
         if (className.startsWith(PLUGIN_START_NAME)) {
             String activity = sHostActMap.get(className);
             DLog.i("className: " + className + " activity: " + activity);
@@ -76,11 +63,11 @@ public class ActPlugin {
         return null;
     }
 
-    public ActivityInfo getPluginActivityInfo(String activityName) {
+    public static ActivityInfo getPluginActivityInfo(String activityName) {
         return sPluginActMap.get(activityName);
     }
 
-    public void obtainHostActivity(PackageInfo pInfo) {
+    public static void obtainHostActivity(PackageInfo pInfo) {
         ActivityInfo[] activities = pInfo.activities;
         sPackageName = pInfo.packageName;
         for (ActivityInfo activityInfo : activities) {
@@ -91,7 +78,7 @@ public class ActPlugin {
         }
     }
 
-    public void obtainPluginActivity(PackageInfo pInfo) {
+    public static void obtainPluginActivity(PackageInfo pInfo) {
         ActivityInfo[] activities = pInfo.activities;
         for (ActivityInfo activityInfo : activities) {
             DLog.i("Plugin activityInfo>" + activityInfo.name + " packageName: " + activityInfo.packageName);

@@ -124,7 +124,7 @@ public class SPlugin {
         Class<?> clazz = null;
 //        DLog.e("loadClass className: " + className);
         if (mClassLoader != null) {
-            String activity = ActPlugin.getInstance().solveActClass(className);
+            String activity = ActPlugin.solveActClass(className);
             if (activity != null) {
                 clazz = mClassLoader.loadClass(activity);
             } else {
@@ -159,7 +159,7 @@ public class SPlugin {
         if (pInfo != null) {
             ApplicationInfo appInfo = pInfo.applicationInfo;
             DLog.i("Host appInfo theme>" + Integer.toHexString(appInfo.theme));
-            ActPlugin.getInstance().obtainHostActivity(pInfo);
+            ActPlugin.obtainHostActivity(pInfo);
             ServicePlugin.obtainHostService(pInfo);
         }
     }
@@ -191,7 +191,7 @@ public class SPlugin {
             applicationInfo.set(null, appInfo);
             classLoader.set(null, mClassLoader);
             DLog.i("Plugin appInfo theme>" + Integer.toHexString(appInfo.theme));
-            ActPlugin.getInstance().obtainPluginActivity(pInfo);
+            ActPlugin.obtainPluginActivity(pInfo);
             ServicePlugin.obtainPluginService(pInfo);
 
             ActivityInfo[] receivers = pInfo.receivers;

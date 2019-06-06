@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 ComponentName cn = new ComponentName(MainActivity.this.getPackageName(), "com.dming.testndk.TestNDKActivity");
                 intent.setComponent(cn);
-                ActPlugin.getInstance().startActivity(MainActivity.this, intent, -1, null);
+                ActPlugin.startActivity(MainActivity.this, intent, -1, null);
             }
         });
 

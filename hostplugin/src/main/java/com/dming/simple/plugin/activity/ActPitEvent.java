@@ -21,17 +21,16 @@ public class ActPitEvent {
     }
 
     public boolean startActivityForResult(Intent intent, int requestCode, Bundle options) {
-        ActPlugin actPlugin = ActPlugin.getInstance();
-        if (intent.getComponent() != null && actPlugin.sPackageName != null) {
+        if (intent.getComponent() != null && ActPlugin.sPackageName != null) {
             String activityName = intent.getComponent().getClassName();
-            String activityPit = actPlugin.findActivityPit(activityName);
+            String activityPit = ActPlugin.findActivityPit(activityName);
             DLog.i("startActivityForResult activityPit: " + activityPit + " activityName: " + activityName);
             if (activityPit == null) {
                 return false;
             }
-            actPlugin.sHostActMap.put(activityPit, activityName);
-            intent.setClassName(actPlugin.sPackageName, activityPit);
-            ActivityInfo activityInfo = actPlugin.getPluginActivityInfo(activityName);
+            ActPlugin.sHostActMap.put(activityPit, activityName);
+            intent.setClassName(ActPlugin.sPackageName, activityPit);
+            ActivityInfo activityInfo = ActPlugin.getPluginActivityInfo(activityName);
             intent.putExtra("ActivityInfo", activityInfo);
             return true;
         }
