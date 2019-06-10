@@ -42,10 +42,16 @@ public class ServicePitEvent {
 
     public boolean bindService(Intent intent, ServiceConnection conn, int flags) {
         if (intent.getComponent() != null && ServicePlugin.sPackageName != null) {
-            String pluginName = intent.getComponent().getClassName();
-            String hostName = ServicePlugin.findPluginService(pluginName);
-            if(hostName == null)return false;
-            intent.setClassName(ServicePlugin.sPackageName, hostName);
+            String serviceName = intent.getComponent().getClassName();
+            String servicePit = ServicePlugin.findServicePit(serviceName);
+            DLog.i("bindService servicePit: " + servicePit + " serviceName: " + serviceName);
+            if (servicePit == null) {
+                return false;
+            }
+            ServicePlugin.sHostServiceMap.put(servicePit, serviceName);
+            intent.setClassName(ServicePlugin.sPackageName, servicePit);
+            ServiceInfo serviceInfo = ServicePlugin.getPluginServiceInfo(serviceName);
+            intent.putExtra("ServiceInfo", serviceInfo);
             return true;
         }
         return false;

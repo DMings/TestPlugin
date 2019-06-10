@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 ComponentName cn = new ComponentName(MainActivity.this.getPackageName(), "com.dming.testndk.TestService");
                 intent.setComponent(cn);
-                ServicePlugin.bindService(MainActivity.this, intent,mConnection, Context.BIND_ABOVE_CLIENT);
+                ServicePlugin.bindService(MainActivity.this, intent,mConnection, Context.BIND_AUTO_CREATE);
             }
         });
 
