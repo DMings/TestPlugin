@@ -3,12 +3,18 @@ package com.dming.simple;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.pm.*;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ProviderInfo;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Looper;
 import com.dming.simple.plugin.activity.ActPitEvent;
 import com.dming.simple.plugin.activity.ActPlugin;
+import com.dming.simple.plugin.provider.ProPlugin;
+import com.dming.simple.plugin.receiver.RecPitEvent;
+import com.dming.simple.plugin.receiver.RecPlugin;
 import com.dming.simple.plugin.service.ServicePitEvent;
 import com.dming.simple.plugin.service.ServicePlugin;
 import com.dming.simple.utils.DLog;
@@ -185,24 +191,16 @@ public class SPlugin {
             Field resources = pluginClass.getDeclaredField("sResources");
             Field applicationInfo = pluginClass.getDeclaredField("sApplicationInfo");
             Field classLoader = pluginClass.getDeclaredField("sClassLoader");
-            pluginClass.getDeclaredMethod("setPicEvent", Object.class,Object.class)
-                    .invoke(null, ActPitEvent.getInstance(), ServicePitEvent.getInstance());
+            pluginClass.getDeclaredMethod("setPicEvent", Object.class, Object.class, Object.class)
+                    .invoke(null, ActPitEvent.getInstance(), ServicePitEvent.getInstance(), RecPitEvent.getInstance());
             resources.set(null, resource);
             applicationInfo.set(null, appInfo);
             classLoader.set(null, mClassLoader);
             DLog.i("Plugin appInfo theme>" + Integer.toHexString(appInfo.theme));
             ActPlugin.obtainPluginActivity(pInfo);
             ServicePlugin.obtainPluginService(pInfo);
-
-            ActivityInfo[] receivers = pInfo.receivers;
-            for (ActivityInfo receiverInfo : receivers) {
-                DLog.i("SPlugin ActivityInfo receivers>" + receiverInfo.name + " " + receiverInfo.flags);
-//                BroadcastReceiverDispatch.addSubBroadcastReceiver(new SubBroadcastReceiver());
-            }
-            ProviderInfo[] providers = pInfo.providers;
-            for (ProviderInfo providerInfo : providers) {
-                DLog.i("SPlugin ProviderInfo>" + providerInfo.authority + " -> " + providerInfo.name);
-            }
+            RecPlugin.dealPluginReceiver(context, pInfo);
+            ProPlugin.dealPluginProvider(pInfo);
         }
     }
 

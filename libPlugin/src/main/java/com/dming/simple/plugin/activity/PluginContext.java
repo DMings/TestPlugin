@@ -1,13 +1,12 @@
 package com.dming.simple.plugin.activity;
 
 
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
+import android.content.*;
 import android.content.pm.ApplicationInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
+import android.os.Bundle;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -157,4 +156,37 @@ public class PluginContext extends ContextThemeWrapper {
         }
         return super.stopService(name);
     }
+
+    @Override
+    public void sendBroadcast(Intent intent) {
+        if (mClassLoader != null) {
+            PluginManager.sendBroadcast(intent);
+        }
+        super.sendBroadcast(intent);
+    }
+
+    @Override
+    public void sendBroadcast(Intent intent, String receiverPermission) {
+        if (mClassLoader != null) {
+            PluginManager.sendBroadcast(intent);
+        }
+        super.sendBroadcast(intent, receiverPermission);
+    }
+
+    @Override
+    public void sendOrderedBroadcast(Intent intent, String receiverPermission) {
+        if (mClassLoader != null) {
+            PluginManager.sendBroadcast(intent);
+        }
+        super.sendOrderedBroadcast(intent, receiverPermission);
+    }
+
+    @Override
+    public void sendOrderedBroadcast(Intent intent, String receiverPermission, BroadcastReceiver resultReceiver, Handler scheduler, int initialCode, String initialData, Bundle initialExtras) {
+        if (mClassLoader != null) {
+            PluginManager.sendBroadcast(intent);
+        }
+        super.sendOrderedBroadcast(intent, receiverPermission, resultReceiver, scheduler, initialCode, initialData, initialExtras);
+    }
+
 }

@@ -17,10 +17,12 @@ public class PluginManager {
     public static ClassLoader sClassLoader;
     private static Object sActPitEvent;
     private static Object sServicePitEvent;
+    private static Object sRecPitEvent;
 
-    public static void setPicEvent(Object actObj, Object serviceObj) {
+    public static void setPicEvent(Object actObj, Object serviceObj,Object recObj) {
         sActPitEvent = actObj;
         sServicePitEvent = serviceObj;
+        sRecPitEvent = recObj;
         DLog.i("PluginManager.sActPitEvent: " + PluginManager.sActPitEvent.getClass().getClassLoader());
     }
 
@@ -100,6 +102,19 @@ public class PluginManager {
         } catch (IllegalAccessException e) {
         } catch (InvocationTargetException e) {
         }
+    }
+
+    public static boolean sendBroadcast(Intent intent) {
+        boolean b = false;
+        try {
+            Method sendBroadcast = PluginManager.sRecPitEvent.getClass()
+                    .getDeclaredMethod("sendBroadcast", Intent.class);
+            b = (boolean) sendBroadcast.invoke(PluginManager.sRecPitEvent, intent);
+        } catch (NoSuchMethodException e) {
+        } catch (IllegalAccessException e) {
+        } catch (InvocationTargetException e) {
+        }
+        return b;
     }
 
 }

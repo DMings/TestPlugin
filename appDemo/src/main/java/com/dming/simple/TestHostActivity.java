@@ -16,6 +16,7 @@ public class TestHostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(TestHostActivity.this, TestHostActivity.this.getString(R.string.test_toast),Toast.LENGTH_SHORT).show();
+//                getContentResolver().regi
             }
         });
     }
