@@ -18,7 +18,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".TestHostActivity"/>
-
+        <!--<receiver-->
+                <!--android:name="com.dming.simple.MyReceiver"-->
+                <!--android:enabled="true"-->
+                <!--android:exported="true">-->
+        <!--</receiver>-->
     </application>
 
 </manifest>

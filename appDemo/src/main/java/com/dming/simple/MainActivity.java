@@ -1,9 +1,6 @@
 package com.dming.simple;
 
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
+import android.content.*;
 import android.os.*;
 import android.view.View;
 import android.widget.Toast;
@@ -94,13 +91,36 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_receiver).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DLog.i("broadcastReceiver.getClass().getName()->"+broadcastReceiver.getClass().getName());
+//                intent.setClassName(MainActivity.this.getPackageName(),broadcastReceiver.getClass().getName());
                 Intent intent = new Intent();
-                intent.setClassName(RecPlugin.sPackageName,"com.dming.testndk.TestBroadcastReceiver");
-                sendBroadcast(intent);
+                intent.setComponent(new ComponentName("com.dming.simple", "com.dming.simple.MyReceiver"));
+//                intent.setAction("abcdefg");
+                MainActivity.this.sendBroadcast(intent);
+//                Intent intent = new Intent();
+//                intent.setClassName(RecPlugin.sPackageName,"com.dming.testndk.TestBroadcastReceiver");
+//                sendBroadcast(intent);
             }
         });
-
+        IntentFilter intentFilter = new IntentFilter();
+//        intentFilter.addAction("abcdefg");
+        registerReceiver(myReceiver,intentFilter);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(myReceiver);
+    }
+
+    private MyReceiver myReceiver = new MyReceiver();
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            DLog.i("onReceive>>>"+intent);
+        }
+    };
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
