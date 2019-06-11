@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.dming.simple.plugin.activity.ActPlugin;
+import com.dming.simple.plugin.receiver.RecPlugin;
 import com.dming.simple.plugin.service.ServicePlugin;
 import com.dming.simple.utils.DLog;
 
@@ -88,6 +89,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ServicePlugin.unbindService(MainActivity.this, mConnection);
+            }
+        });
+        findViewById(R.id.btn_receiver).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClassName(RecPlugin.sPackageName,"com.dming.testndk.TestBroadcastReceiver");
+                sendBroadcast(intent);
             }
         });
 

@@ -6,14 +6,12 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ProviderInfo;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Looper;
 import com.dming.simple.plugin.activity.ActPitEvent;
 import com.dming.simple.plugin.activity.ActPlugin;
 import com.dming.simple.plugin.provider.ProPlugin;
-import com.dming.simple.plugin.receiver.RecPitEvent;
 import com.dming.simple.plugin.receiver.RecPlugin;
 import com.dming.simple.plugin.service.ServicePitEvent;
 import com.dming.simple.plugin.service.ServicePlugin;
@@ -30,7 +28,7 @@ import java.lang.reflect.InvocationTargetException;
 public class SPlugin {
 
     private static volatile SPlugin sSPlugin;
-    public ClassLoader mClassLoader;
+    private ClassLoader mClassLoader;
     private boolean mPatchClassLoader = false;
     private boolean mLoadPlugin = false;
 
@@ -143,6 +141,10 @@ public class SPlugin {
         return clazz;
     }
 
+    public ClassLoader getClassLoader() {
+        return mClassLoader;
+    }
+
     private void dealPlugin(Context context, File apkFile) throws PackageManager.NameNotFoundException,
             ClassNotFoundException, NoSuchMethodException,
             InvocationTargetException, IllegalAccessException, NoSuchFieldException {
@@ -153,6 +155,14 @@ public class SPlugin {
                 ndkOutputDir.getAbsolutePath(),
                 context.getClassLoader().getParent()
         );
+//        DLog dLog = new DLog(); // Test 不同类加载器，加载相同类,会报错
+//        Class<?> aClass = mClassLoader.loadClass(DLog.class.getName());
+//        try {
+//            dLog = (DLog) aClass.newInstance();
+//            Log.i("Test",dLog.toString());
+//        } catch (InstantiationException e) {
+//            e.printStackTrace();
+//        }
         dealHostPkgInfo(context);
         dealPluginPkgInfo(context, apkFile);
     }
@@ -191,8 +201,8 @@ public class SPlugin {
             Field resources = pluginClass.getDeclaredField("sResources");
             Field applicationInfo = pluginClass.getDeclaredField("sApplicationInfo");
             Field classLoader = pluginClass.getDeclaredField("sClassLoader");
-            pluginClass.getDeclaredMethod("setPicEvent", Object.class, Object.class, Object.class)
-                    .invoke(null, ActPitEvent.getInstance(), ServicePitEvent.getInstance(), RecPitEvent.getInstance());
+            pluginClass.getDeclaredMethod("setPicEvent", Object.class, Object.class)
+                    .invoke(null, ActPitEvent.getInstance(), ServicePitEvent.getInstance());
             resources.set(null, resource);
             applicationInfo.set(null, appInfo);
             classLoader.set(null, mClassLoader);

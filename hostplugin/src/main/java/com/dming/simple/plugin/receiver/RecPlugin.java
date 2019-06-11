@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
+import com.dming.simple.SPlugin;
 import com.dming.simple.utils.DLog;
 
 import java.util.ArrayList;
@@ -22,7 +23,8 @@ public class RecPlugin {
         mBroadcastReceiverList.add(subBroadcastReceiver);
     }
 
-    public static void clearBroadcastReceiverList() {
+    public static void clearBroadcastReceiverList(Context context) {
+        unRegisterBroadcastReceiver(context);
         mBroadcastReceiverList.clear();
     }
 
@@ -30,6 +32,7 @@ public class RecPlugin {
         for (SubBroadcastReceiver subReceiver : mBroadcastReceiverList) {
             context.registerReceiver(subReceiver.getReceiver(), subReceiver.getFilter() != null ?
                     subReceiver.getFilter() : new IntentFilter());
+            DLog.i("subReceiver>"+subReceiver.getReceiver().getClass().getSimpleName());
         }
     }
 
@@ -42,11 +45,11 @@ public class RecPlugin {
     public static void dealPluginReceiver(Context context, PackageInfo pInfo) {
         ActivityInfo[] receivers = pInfo.receivers;
         sPackageName = pInfo.packageName;
-        clearBroadcastReceiverList();
+        clearBroadcastReceiverList(context);
         for (ActivityInfo receiverInfo : receivers) {
             DLog.i("SPlugin ActivityInfo receivers>" + receiverInfo.name + " " + receiverInfo.flags);
             try {
-                Class receiver = Class.forName(receiverInfo.name);
+                Class receiver = SPlugin.getInstance().getClassLoader().loadClass(receiverInfo.name);
                 addSubBroadcastReceiver(new SubBroadcastReceiver((BroadcastReceiver) receiver.newInstance()));
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -56,7 +59,6 @@ public class RecPlugin {
                 e.printStackTrace();
             }
         }
-        unRegisterBroadcastReceiver(context);
         registerBroadcastReceiver(context);
     }
 
