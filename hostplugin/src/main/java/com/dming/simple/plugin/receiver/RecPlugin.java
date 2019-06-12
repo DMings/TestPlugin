@@ -6,9 +6,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
+import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import com.dming.simple.SPlugin;
 import com.dming.simple.utils.DLog;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +37,7 @@ public class RecPlugin {
         for (SubBroadcastReceiver subReceiver : mBroadcastReceiverList) {
             context.registerReceiver(subReceiver.getReceiver(), subReceiver.getFilter() != null ?
                     subReceiver.getFilter() : new IntentFilter());
-            DLog.i("subReceiver>"+subReceiver.getReceiver().getClass().getSimpleName());
+            DLog.i("subReceiver>" + subReceiver.getReceiver().getClass().getSimpleName());
         }
     }
 
@@ -42,15 +47,17 @@ public class RecPlugin {
         }
     }
 
-    public static void dealPluginReceiver(Context context, PackageInfo pInfo) {
+    public static void dealPluginReceiver(Context context, PackageInfo pInfo, Resources resource) {
         ActivityInfo[] receivers = pInfo.receivers;
         sPackageName = pInfo.packageName;
         clearBroadcastReceiverList(context);
+        parseAndroidManifest(resource);
         for (ActivityInfo receiverInfo : receivers) {
             DLog.i("SPlugin ActivityInfo receivers>" + receiverInfo.name + " " + receiverInfo.flags);
             try {
                 Class receiver = SPlugin.getInstance().getClassLoader().loadClass(receiverInfo.name);
-                addSubBroadcastReceiver(new SubBroadcastReceiver((BroadcastReceiver) receiver.newInstance()));
+                IntentFilter intentFilter = new IntentFilter();
+                addSubBroadcastReceiver(new SubBroadcastReceiver((BroadcastReceiver) receiver.newInstance(), intentFilter));
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -60,6 +67,63 @@ public class RecPlugin {
             }
         }
         registerBroadcastReceiver(context);
+    }
+
+    private static void parseAndroidManifest(Resources resource) {
+        try {
+            final XmlResourceParser xml = resource.getAssets().openXmlResourceParser("AndroidManifest.xml");
+            try {
+                int eventType = xml.getEventType();   //先获取当前解析器光标在哪
+                while (eventType != XmlPullParser.END_DOCUMENT) {    //如果还没到文档的结束标志，那么就继续往下处理
+                    switch (eventType) {
+                        case XmlPullParser.START_DOCUMENT:
+                            break;
+                        case XmlPullParser.START_TAG:
+                            if ("receiver".equals(xml.getName())) {
+                                while (eventType != XmlPullParser.END_DOCUMENT) {
+                                    if (eventType == XmlPullParser.START_TAG) {
+                                        String name = xml.getName();
+//                                        if("action".equals(action)){
+                                        DLog.d("name-> " + name);
+                                        for (int i = xml.getAttributeCount() - 1; i >= 0; i--) {
+                                            DLog.d(xml.getAttributeName(i) + ": " + xml.getAttributeValue(i));
+                                        }
+                                    }
+                                    eventType = xml.nextToken();
+                                }
+                            }
+                            break;
+                        case XmlPullParser.TEXT:
+                            DLog.d("Text:" + xml.getText());
+                            break;
+                        case XmlPullParser.END_TAG:
+                            break;
+                        default:
+                            break;
+                    }
+                    eventType = xml.next();   //将当前解析器光标往下一步移
+                }
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+//            int eventType = xml.getEventType();
+//            while (eventType != XmlPullParser.END_DOCUMENT) {
+//                if (eventType == XmlPullParser.START_TAG) {
+//                    String name = xml.getName();
+//                    if("action".equals(name)){
+//                        DLog.d( "name> "+name);
+//                        for (int i = xml.getAttributeCount() - 1; i >= 0; i--) {
+//                            DLog.d(xml.getAttributeName(i) + ": " + xml.getAttributeValue(i));
+//                        }
+//                    }
+//                }
+//                eventType = xml.nextToken();
+//            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void dispatchReceiver(Context context, Intent intent) {
