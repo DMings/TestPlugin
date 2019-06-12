@@ -3,10 +3,12 @@ package com.dming.simple;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.os.Handler;
 import android.os.Looper;
 import com.dming.simple.plugin.activity.ActPitEvent;
@@ -18,6 +20,7 @@ import com.dming.simple.plugin.service.ServicePlugin;
 import com.dming.simple.utils.DLog;
 import com.dming.simple.utils.FileUtils;
 import dalvik.system.DexClassLoader;
+import org.xmlpull.v1.XmlPullParser;
 
 import java.io.File;
 import java.io.IOException;
@@ -197,6 +200,7 @@ public class SPlugin {
             appInfo.sourceDir = apkPath;
             appInfo.publicSourceDir = apkPath;
             Resources resource = packageManager.getResourcesForApplication(appInfo);
+            parseAndroidManifest(resource);
             Class<?> pluginClass = mClassLoader.loadClass("com.dming.simple.PluginManager");
             Field resources = pluginClass.getDeclaredField("sResources");
             Field applicationInfo = pluginClass.getDeclaredField("sApplicationInfo");
@@ -211,6 +215,25 @@ public class SPlugin {
             ServicePlugin.obtainPluginService(pInfo);
             RecPlugin.dealPluginReceiver(context, pInfo);
             ProPlugin.dealPluginProvider(pInfo);
+        }
+    }
+
+    private static void parseAndroidManifest(Resources resource) {
+        try {
+            final XmlResourceParser xml = resource.getAssets().openXmlResourceParser("AndroidManifest.xml");
+            int eventType = xml.getEventType();
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    String name = xml.getName();
+                    DLog.d( "name: "+name);
+                    for (int i = xml.getAttributeCount() - 1; i >= 0; i--) {
+                        DLog.d(xml.getAttributeName(i) + ": " + xml.getAttributeValue(i));
+                    }
+                }
+                eventType = xml.nextToken();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

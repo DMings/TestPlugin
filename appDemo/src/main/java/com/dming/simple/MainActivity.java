@@ -91,11 +91,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_receiver).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DLog.i("broadcastReceiver.getClass().getName()->"+broadcastReceiver.getClass().getName());
-//                intent.setClassName(MainActivity.this.getPackageName(),broadcastReceiver.getClass().getName());
                 Intent intent = new Intent();
-                intent.setComponent(new ComponentName("com.dming.simple", "com.dming.simple.MyReceiver"));
-//                intent.setAction("abcdefg");
+                intent.setAction("abcdefg");
                 MainActivity.this.sendBroadcast(intent);
 //                Intent intent = new Intent();
 //                intent.setClassName(RecPlugin.sPackageName,"com.dming.testndk.TestBroadcastReceiver");
@@ -103,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         IntentFilter intentFilter = new IntentFilter();
-//        intentFilter.addAction("abcdefg");
+        intentFilter.addAction("abcdefg");
         registerReceiver(myReceiver,intentFilter);
     }
 
