@@ -1,6 +1,7 @@
 package com.dming.simple;
 
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
@@ -17,6 +18,7 @@ public class TestHostActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(TestHostActivity.this, TestHostActivity.this.getString(R.string.test_toast),Toast.LENGTH_SHORT).show();
 //                getContentResolver().regi
+//                Looper.getMainLooper().quit();
             }
         });
     }
