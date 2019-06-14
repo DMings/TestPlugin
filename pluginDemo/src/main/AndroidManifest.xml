@@ -31,6 +31,11 @@
                 <action android:name="android.intent.action.xxx"/>
             </intent-filter>
         </receiver>
+        <receiver android:name=".TestBroadcastReceiver2">
+            <intent-filter>
+                <action android:name="android.intent.action.bbbb"/>
+            </intent-filter>
+        </receiver>
         <service android:name=".TestService"/>
         <provider
                 android:authorities="com.dming.testndk"
