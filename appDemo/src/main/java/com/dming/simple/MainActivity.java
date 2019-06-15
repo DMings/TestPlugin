@@ -1,13 +1,15 @@
 package com.dming.simple;
 
 import android.content.*;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.*;
 import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.dming.simple.plugin.activity.ActPlugin;
-import com.dming.simple.plugin.receiver.RecPlugin;
+import com.dming.simple.plugin.provider.ProviderDispatch;
 import com.dming.simple.plugin.service.ServicePlugin;
 import com.dming.simple.utils.DLog;
 
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 ComponentName cn = new ComponentName(MainActivity.this.getPackageName(), "com.dming.testndk.TestService");
                 intent.setComponent(cn);
-                ServicePlugin.bindService(MainActivity.this, intent,mConnection, Context.BIND_AUTO_CREATE);
+                ServicePlugin.bindService(MainActivity.this, intent, mConnection, Context.BIND_AUTO_CREATE);
             }
         });
 
@@ -91,17 +93,35 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_receiver).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setAction("abcdefg");
-                MainActivity.this.sendBroadcast(intent);
-//                Intent intent = new Intent();
-//                intent.setClassName(RecPlugin.sPackageName,"com.dming.testndk.TestBroadcastReceiver");
-//                sendBroadcast(intent);
+                Intent intent1 = new Intent();
+                intent1.setAction("android.intent.action.xxx");
+                MainActivity.this.sendBroadcast(intent1);
+
+                Intent intent2 = new Intent();
+                intent2.setAction("android.intent.action.bbbb");
+                MainActivity.this.sendBroadcast(intent2);
+            }
+        });
+        findViewById(R.id.btn_provider).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String toProviderName = "com.dming.testndk";
+                String path = "testPath";
+                final String URL = "content://"+ ProviderDispatch.AUTHORITIES +"/"+toProviderName+"/"+path;
+                Uri uri = Uri.parse(URL);
+                Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+                try {
+                    DLog.e("Cursor = " + cursor);
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
             }
         });
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("abcdefg");
-        registerReceiver(myReceiver,intentFilter);
+        registerReceiver(myReceiver, intentFilter);
     }
 
     @Override
@@ -111,13 +131,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private MyReceiver myReceiver = new MyReceiver();
-
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            DLog.i("onReceive>>>"+intent);
-        }
-    };
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {

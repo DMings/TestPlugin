@@ -13,7 +13,7 @@
         <service android:name="com.dming.simple.ServiceS2"/>
         <service android:name="com.dming.simple.ServiceS3"/>
 
-        <provider android:authorities="com.simple.authorities" android:name=".plugin.provider.ProviderDispatch"/>
+        <provider android:authorities="com.simple.provider" android:name=".plugin.provider.ProviderDispatch"/>
         <receiver android:name=".plugin.receiver.BroadcastReceiverDispatch"/>
 
     </application>

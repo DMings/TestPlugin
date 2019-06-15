@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.ServiceInfo;
 import android.text.TextUtils;
+import com.dming.simple.plugin.activity.ActPlugin;
 import com.dming.simple.utils.DLog;
 
 import java.util.Map;
@@ -24,7 +25,7 @@ public class ServicePitEvent {
     }
 
     public boolean startService(Intent intent) {
-        if (intent.getComponent() != null && ServicePlugin.sPackageName != null) {
+        if (intent.getComponent() != null && ActPlugin.sPackageName != null) {
             String serviceName = intent.getComponent().getClassName();
             String servicePit = ServicePlugin.findServicePit(serviceName);
             DLog.i("startService servicePit: " + servicePit + " serviceName: " + serviceName);
@@ -32,7 +33,7 @@ public class ServicePitEvent {
                 return false;
             }
             ServicePlugin.sHostServiceMap.put(servicePit, serviceName);
-            intent.setClassName(ServicePlugin.sPackageName, servicePit);
+            intent.setClassName(ActPlugin.sPackageName, servicePit);
             ServiceInfo serviceInfo = ServicePlugin.getPluginServiceInfo(serviceName);
             intent.putExtra("ServiceInfo", serviceInfo);
             return true;
@@ -41,7 +42,7 @@ public class ServicePitEvent {
     }
 
     public boolean bindService(Intent intent, ServiceConnection conn, int flags) {
-        if (intent.getComponent() != null && ServicePlugin.sPackageName != null) {
+        if (intent.getComponent() != null && ActPlugin.sPackageName != null) {
             String serviceName = intent.getComponent().getClassName();
             String servicePit = ServicePlugin.findServicePit(serviceName);
             DLog.i("bindService servicePit: " + servicePit + " serviceName: " + serviceName);
@@ -49,7 +50,7 @@ public class ServicePitEvent {
                 return false;
             }
             ServicePlugin.sHostServiceMap.put(servicePit, serviceName);
-            intent.setClassName(ServicePlugin.sPackageName, servicePit);
+            intent.setClassName(ActPlugin.sPackageName, servicePit);
             ServiceInfo serviceInfo = ServicePlugin.getPluginServiceInfo(serviceName);
             intent.putExtra("ServiceInfo", serviceInfo);
             return true;
@@ -62,11 +63,11 @@ public class ServicePitEvent {
     }
 
     public boolean stopService(Intent intent) {
-        if (intent.getComponent() != null && ServicePlugin.sPackageName != null) {
+        if (intent.getComponent() != null && ActPlugin.sPackageName != null) {
             String pluginName = intent.getComponent().getClassName();
             String hostName = ServicePlugin.findPluginService(pluginName);
             if(hostName == null)return false;
-            intent.setClassName(ServicePlugin.sPackageName, hostName);
+            intent.setClassName(ActPlugin.sPackageName, hostName);
             return true;
         }
         return false;

@@ -22,7 +22,6 @@ import java.util.Map;
 public class RecPlugin {
 
     public static final String RECEIVER_NAME = BroadcastReceiverDispatch.class.getName();
-    public static String sPackageName;
     public final static String PLUGIN_RECEIVER_FLAG = "pluginReceiver";
     private static List<SubBroadcastReceiver> mBroadcastReceiverList = new ArrayList<>();
 
@@ -49,41 +48,125 @@ public class RecPlugin {
         }
     }
 
+    public static XmlBean getXmlBeanByName(String name, XmlBean xmlBean) {
+        if (name.equals(xmlBean.getName())) {
+            return xmlBean;
+        } else if (xmlBean.getSon() != null) {
+            if (name.equals(xmlBean.getSon().getName())) {
+                return xmlBean.getSon();
+            } else {
+                for (int i = 0; i < xmlBean.getSon().getYoungerBrother().size(); i++) {
+                    if (name.equals(xmlBean.getSon().getYoungerBrother().get(i).getName())) {
+                        return xmlBean.getSon().getYoungerBrother().get(i);
+                    }
+                }
+            }
+        } else {
+            for (int i = 0; i < xmlBean.getYoungerBrother().size(); i++) {
+                if (name.equals(xmlBean.getYoungerBrother().get(i).getName())) {
+                    return xmlBean.getYoungerBrother().get(i);
+                }
+            }
+        }
+        return null;
+    }
+
+    public interface CallBack {
+        void onGetXml(XmlBean xmlBean);
+    }
+
+    public static void parserXmlBeanByName(String name, XmlBean xmlBean, CallBack callBack) {
+        if (name.equals(xmlBean.getName())) {
+            callBack.onGetXml(xmlBean);
+        } else if (xmlBean.getSon() != null) {
+            if (name.equals(xmlBean.getSon().getName())) {
+                callBack.onGetXml(xmlBean.getSon());
+            } else {
+                for (int i = 0; i < xmlBean.getSon().getYoungerBrother().size(); i++) {
+                    if (name.equals(xmlBean.getSon().getYoungerBrother().get(i).getName())) {
+                        callBack.onGetXml(xmlBean.getSon().getYoungerBrother().get(i));
+                    }
+                }
+            }
+        } else {
+            for (int i = 0; i < xmlBean.getYoungerBrother().size(); i++) {
+                if (name.equals(xmlBean.getYoungerBrother().get(i).getName())) {
+                    callBack.onGetXml(xmlBean.getYoungerBrother().get(i));
+                }
+            }
+        }
+    }
+
     public static void dealPluginReceiver(Context context, PackageInfo pInfo, Resources resource) {
         ActivityInfo[] receivers = pInfo.receivers;
-        sPackageName = pInfo.packageName;
         clearBroadcastReceiverList(context);
         ////////
-        Map<String, HashMap<String, String>> receiver = new HashMap<>();
+        final Map<String, HashMap<String, ArrayList<String>>> receiverMap = new HashMap<>();
         XmlBean xmlBean;
         XmlBean rootXml = parseAndroidManifest(resource);
-        if ("manifest".equals(rootXml.getName())) {
-            xmlBean = rootXml.getSon();
-            if (xmlBean != null && xmlBean.getYoungerBrother().size() > 0) {
-                for (int i = 0; i < xmlBean.getYoungerBrother().size(); i++) {
-                    if ("application".equals(xmlBean.getYoungerBrother().get(i).getName())) {
-                        xmlBean = xmlBean.getYoungerBrother().get(i).getSon();
-                        if (xmlBean != null) {
-                            if("receiver".equals(xmlBean.getName())){
-//                                xmlBean.getSon().getSon();
-                            }else {
-                                for (int j = 0; j < xmlBean.getYoungerBrother().size(); j++) {
-                                    if ("receiver".equals(xmlBean.getYoungerBrother().get(i).getName())) {
-
+        xmlBean = getXmlBeanByName("manifest", rootXml);
+        if (xmlBean != null) {
+            xmlBean = getXmlBeanByName("application", xmlBean);
+            if (xmlBean != null) {
+                XmlBean receiverXml = getXmlBeanByName("receiver", xmlBean);
+                if (receiverXml != null) {
+                    parserXmlBeanByName("receiver", xmlBean, new CallBack() {
+                        @Override
+                        public void onGetXml(final XmlBean receiver) {
+                            String recName = receiver.getAttributeMap().get("name");
+                            if (recName != null) {
+                                XmlBean intentFilter = getXmlBeanByName("intent-filter", receiver);
+                                if (intentFilter != null) {
+                                    if (receiverMap.get(recName) == null) {
+                                        receiverMap.put(recName, new HashMap<String, ArrayList<String>>());
+                                    }
+                                    if (intentFilter.getSon() != null) {
+                                        if (receiverMap.get(recName).get(intentFilter.getSon().name) == null) {
+                                            receiverMap.get(recName).put(intentFilter.getSon().name, new ArrayList<String>());
+                                        }
+                                        receiverMap.get(recName).get(intentFilter.getSon().name).add(intentFilter.getSon().getAttributeMap().get("name"));
+                                        for (int i = 0; i < intentFilter.getSon().getYoungerBrother().size(); i++) {
+                                            XmlBean filter = intentFilter.getSon().getYoungerBrother().get(i);
+                                            if (receiverMap.get(recName).get(filter.name) == null) {
+                                                receiverMap.get(recName).put(filter.name, new ArrayList<String>());
+                                            }
+                                            receiverMap.get(recName).get(filter.name).add(filter.getAttributeMap().get("name"));
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
+                    });
                 }
             }
         }
-
+        /////
         for (ActivityInfo receiverInfo : receivers) {
             DLog.i("SPlugin ActivityInfo receivers>" + receiverInfo.name + " " + receiverInfo.flags);
             try {
                 Class receiver = SPlugin.getInstance().getClassLoader().loadClass(receiverInfo.name);
                 IntentFilter intentFilter = new IntentFilter();
+                HashMap<String, ArrayList<String>> attributeMap = receiverMap.get(receiverInfo.name);
+                if (attributeMap != null) {
+                    if (attributeMap.get("action") != null) {
+                        ArrayList<String> actionList = attributeMap.get("action");
+                        if (actionList != null) {
+                            for (String action : actionList) {
+                                DLog.i("receiver: " + receiverInfo.name + " action: " + action);
+                                intentFilter.addAction(action);
+                            }
+                        }
+                    }
+                    if (attributeMap.get("category") != null) {
+                        ArrayList<String> categoryList = attributeMap.get("category");
+                        if (categoryList != null) {
+                            for (String category : categoryList) {
+                                DLog.i("receiver: " + receiverInfo.name + " category: " + category);
+                                intentFilter.addCategory(category);
+                            }
+                        }
+                    }
+                }
                 addSubBroadcastReceiver(new SubBroadcastReceiver((BroadcastReceiver) receiver.newInstance(), intentFilter));
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();

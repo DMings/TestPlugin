@@ -1,10 +1,7 @@
 package com.dming.simple.plugin.activity;
 
 
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
+import android.content.*;
 import android.content.pm.ApplicationInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
@@ -158,4 +155,8 @@ public class PluginContext extends ContextThemeWrapper {
         return super.stopService(name);
     }
 
+    @Override
+    public ContentResolver getContentResolver() {
+        return super.getContentResolver();
+    }
 }

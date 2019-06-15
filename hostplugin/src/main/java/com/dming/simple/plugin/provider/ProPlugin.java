@@ -3,33 +3,32 @@ package com.dming.simple.plugin.provider;
 import android.content.ContentProvider;
 import android.content.pm.PackageInfo;
 import android.content.pm.ProviderInfo;
+import com.dming.simple.SPlugin;
 import com.dming.simple.utils.DLog;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProPlugin {
 
-    public static String sPackageName;
-    private static List<ContentProvider> sContentProviderList = new ArrayList<>();
+    public static Map<String,ContentProvider> sContentProviderMap = new HashMap<>();
 
-    public static void addContentProvider(ContentProvider contentProvider) {
-        sContentProviderList.add(contentProvider);
+    public static void addContentProvider(String name,ContentProvider contentProvider) {
+        sContentProviderMap.put(name,contentProvider);
     }
 
     public static void clearContentProviderMap() {
-        sContentProviderList.clear();
+        sContentProviderMap.clear();
     }
 
     public static void dealPluginProvider(PackageInfo pInfo) {
         ProviderInfo[] providers = pInfo.providers;
-        sPackageName = pInfo.packageName;
         clearContentProviderMap();
         for (ProviderInfo providerInfo : providers) {
             DLog.i("SPlugin ProviderInfo>" + providerInfo.authority + " -> " + providerInfo.name);
             try {
-                Class provider = Class.forName(providerInfo.name);
-                addContentProvider((ContentProvider) provider.newInstance());
+                Class provider = SPlugin.getInstance().getClassLoader().loadClass(providerInfo.name);
+                addContentProvider(providerInfo.authority,(ContentProvider) provider.newInstance());
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {

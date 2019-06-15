@@ -18,7 +18,6 @@ public class ServicePlugin {
     public static HashMap<String, String> sHostServiceMap = new HashMap<>();
     private static HashMap<String, ServiceInfo> sPluginServiceMap = new HashMap<>();
     private static final String PLUGIN_START_NAME = "com.dming.simple.Service";
-    public static String sPackageName;
 
 //    private static volatile ServicePitEvent sServicePitEvent;
 //
@@ -161,7 +160,6 @@ public class ServicePlugin {
 
     public static void obtainHostService(PackageInfo pInfo) {
         ServiceInfo[] services = pInfo.services;
-        sPackageName = pInfo.packageName;
         for (ServiceInfo serviceInfo : services) {
             DLog.i("Host serviceInfo>" + serviceInfo.name + " packageName: " + serviceInfo.packageName);
             if (serviceInfo.name.startsWith(PLUGIN_START_NAME)) {

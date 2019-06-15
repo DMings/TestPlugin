@@ -17,10 +17,10 @@ public class SXmlPullParser {
             while (eventType != org.xmlpull.v1.XmlPullParser.END_DOCUMENT) {
                 switch (eventType) {
                     case org.xmlpull.v1.XmlPullParser.START_DOCUMENT:
-                        DLog.i("START_DOCUMENT: " + xml.getName());
+//                        DLog.i("START_DOCUMENT: " + xml.getName());
                         break;
                     case org.xmlpull.v1.XmlPullParser.START_TAG:
-                        DLog.i("START_TAG: " + xml.getName());
+//                        DLog.i("START_TAG: " + xml.getName());
                         if (curXmlBean.name != null) { //二次进入
                             if (curXmlBean.closeTag) { // 完整标签分析完成，下一个兄弟
                                 XmlBean xmlBean = new XmlBean(xml.getName());
@@ -47,21 +47,21 @@ public class SXmlPullParser {
                         }
                         break;
                     case org.xmlpull.v1.XmlPullParser.TEXT:
-                        DLog.i("TEXT: " + xml.getText());
+//                        DLog.i("TEXT: " + xml.getText());
                         curXmlBean.text = xml.getText();
                         break;
                     case org.xmlpull.v1.XmlPullParser.END_TAG:
-                        DLog.i("END_TAG: " + xml.getName());
+//                        DLog.i("END_TAG: " + xml.getName());
                         if (curXmlBean.father != null) { // 找回爸爸
                             if (curXmlBean.father.name.equals(xml.getName())) {//当前标签是爸爸标签
                                 curXmlBean = curXmlBean.father;
-                                DLog.i("father: " + curXmlBean.name);
+//                                DLog.i("father: " + curXmlBean.name);
                             }
                         } else if (curXmlBean.elderBrother != null) { // 自己是小弟，只能通过大兄弟找爸爸
                             if (curXmlBean.elderBrother.father != null) { // 找回爸爸
                                 if (curXmlBean.elderBrother.father.name.equals(xml.getName())) {//当前标签是爸爸标签
                                     curXmlBean = curXmlBean.elderBrother.father;
-                                    DLog.i("->father: " + curXmlBean.name);
+//                                    DLog.i("->father: " + curXmlBean.name);
                                 }
                             }
                         }
