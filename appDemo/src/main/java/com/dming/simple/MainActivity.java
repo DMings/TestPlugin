@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.dming.simple.plugin.activity.ActPlugin;
+import com.dming.simple.plugin.provider.ProPitEvent;
 import com.dming.simple.plugin.provider.ProviderDispatch;
 import com.dming.simple.plugin.service.ServicePlugin;
 import com.dming.simple.utils.DLog;
@@ -107,11 +108,20 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final String toProviderName = "com.dming.testndk";
                 String path = "testPath";
-                final String URL = "content://"+ ProviderDispatch.AUTHORITIES +"/"+toProviderName+"/"+path;
-                Uri uri = Uri.parse(URL);
+                Uri uri = Uri.parse("content://"+ ProviderDispatch.AUTHORITIES +"/"+toProviderName+"/"+path);
                 Cursor cursor = getContentResolver().query(uri, null, null, null, null);
                 try {
                     DLog.e("Cursor = " + cursor);
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+
+                Uri uri2 = Uri.parse("content://"+toProviderName+"/testPath2");
+                cursor = ProPitEvent.getInstance().query(uri2, null, null, null, null);
+                try {
+                    DLog.e("Cursor2 = " + cursor);
                 } finally {
                     if (cursor != null) {
                         cursor.close();

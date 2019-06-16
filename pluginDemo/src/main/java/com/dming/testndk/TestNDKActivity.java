@@ -3,11 +3,15 @@ package com.dming.testndk;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+import com.dming.simple.PluginManager;
 import com.dming.simple.plugin.activity.PluginActivity;
+import com.dming.simple.utils.DLog;
 import com.dming.testndk.one.OneActivity;
 
 public class TestNDKActivity extends PluginActivity {
@@ -40,6 +44,21 @@ public class TestNDKActivity extends PluginActivity {
             public void onClick(View v) {
                 String ndkMsg = getMsgFromNDK();
                 Toast.makeText(TestNDKActivity.this,ndkMsg,Toast.LENGTH_SHORT).show();
+            }
+        });
+        findViewById(R.id.testProvider).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String toProviderName = "com.dming.testndk";
+                Uri uri = Uri.parse("content://"+toProviderName+"/testPath_xxxxxxxx");
+                Cursor cursor = PluginManager.getContentResolver().query(uri, null, null, null, null);
+                try {
+                    DLog.e("Cursor = " + cursor);
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
             }
         });
     }

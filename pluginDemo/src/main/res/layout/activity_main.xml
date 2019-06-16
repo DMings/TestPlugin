@@ -21,4 +21,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="插件内Activity跳转" />
+
+    <Button
+            android:id="@+id/testProvider"
+            android:layout_marginTop="10dp"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="插件内Provider测试" />
 </LinearLayout>

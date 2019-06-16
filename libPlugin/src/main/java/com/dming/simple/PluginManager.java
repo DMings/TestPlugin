@@ -5,6 +5,7 @@ import android.content.ServiceConnection;
 import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
+import com.dming.simple.plugin.provider.PluginContentResolver;
 import com.dming.simple.utils.DLog;
 
 import java.lang.reflect.InvocationTargetException;
@@ -17,10 +18,12 @@ public class PluginManager {
     public static ClassLoader sClassLoader;
     private static Object sActPitEvent;
     private static Object sServicePitEvent;
+    private static PluginContentResolver sPluginContentResolver;
 
-    public static void setPicEvent(Object actObj, Object serviceObj) {
+    public static void setPicEvent(Object actObj, Object serviceObj,Object sProviderObj) {
         sActPitEvent = actObj;
         sServicePitEvent = serviceObj;
+        sPluginContentResolver = new PluginContentResolver(sProviderObj);
         DLog.i("PluginManager.sActPitEvent: " + PluginManager.sActPitEvent.getClass().getClassLoader());
     }
 
@@ -100,5 +103,9 @@ public class PluginManager {
         } catch (IllegalAccessException e) {
         } catch (InvocationTargetException e) {
         }
+    }
+
+    public static PluginContentResolver getContentResolver() {
+        return sPluginContentResolver;
     }
 }
