@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-
         findViewById(R.id.btn_host).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 ComponentName cn = new ComponentName(MainActivity.this.getPackageName(), "com.dming.testndk.TestNDKActivity");
                 intent.setComponent(cn);
                 ActPlugin.startActivity(MainActivity.this, intent, -1, null);
+                overridePendingTransition(R.anim.enteralpha,R.anim.exitalpha);
             }
         });
 
@@ -132,6 +132,16 @@ public class MainActivity extends AppCompatActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("abcdefg");
         registerReceiver(myReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override

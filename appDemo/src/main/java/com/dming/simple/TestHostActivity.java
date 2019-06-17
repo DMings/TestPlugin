@@ -1,11 +1,13 @@
 package com.dming.simple;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import com.dming.simple.utils.DLog;
 
 public class TestHostActivity extends AppCompatActivity {
 
@@ -21,5 +23,27 @@ public class TestHostActivity extends AppCompatActivity {
 //                Looper.getMainLooper().quit();
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Thread.sleep(950);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                DLog.i("postDelayed--------->");
+//                new Handler().postDelayed(this,1000);
+//            }
+//        },200);
     }
 }
