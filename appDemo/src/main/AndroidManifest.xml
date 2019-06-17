@@ -18,6 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".TestHostActivity"/>
+        <activity android:name=".TestHostActivity2"/>
         <!--<receiver-->
                 <!--android:name="com.dming.simple.MyReceiver"-->
                 <!--android:enabled="true"-->

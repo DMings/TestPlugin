@@ -1,15 +1,13 @@
 package com.dming.simple;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.dming.simple.utils.DLog;
 
-public class TestHostActivity extends AppCompatActivity {
+public class TestHostActivity2 extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -18,7 +16,7 @@ public class TestHostActivity extends AppCompatActivity {
         findViewById(R.id.btn_test).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(TestHostActivity.this, TestHostActivity.this.getString(R.string.test_toast), Toast.LENGTH_SHORT).show();
+                Toast.makeText(TestHostActivity2.this, TestHostActivity2.this.getString(R.string.test_toast), Toast.LENGTH_SHORT).show();
 //                getContentResolver().regi
 //                Looper.getMainLooper().quit();
             }
@@ -27,7 +25,7 @@ public class TestHostActivity extends AppCompatActivity {
 
     @Override
     public void onEnterAnimationComplete() {
-        DLog.i("onEnterAnimationComplete->>>>>>>>>>>>>>>>>>>>>>");
+        DLog.i("onEnterAnimationComplete-2222222222222222>>>>>>>>>>>>>>>>>>>>>>");
     }
 
     @Override
