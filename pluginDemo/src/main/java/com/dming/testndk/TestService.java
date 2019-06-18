@@ -1,14 +1,12 @@
 package com.dming.testndk;
 
 import android.annotation.SuppressLint;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
-import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import com.dming.simple.plugin.service.PluginService;
@@ -23,33 +21,33 @@ public class TestService extends PluginService {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i("DMUI", "TestService onCreate");
+        DLog.i( "TestService onCreate");
     }
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        Log.i("DMUI", "TestService onBind");
+        DLog.i( "TestService onBind");
         return mMessenger.getBinder();
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
-        Log.i("DMUI", "TestService onUnbind");
+        DLog.i( "TestService onUnbind");
         return super.onUnbind(intent);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i("DMUI", "TestService onDestroy");
+        DLog.i( "TestService onDestroy");
     }
 
     static class IncomingHandler extends Handler {
 
         private Context mContext;
 
-        public IncomingHandler(Context context) {
+        IncomingHandler(Context context) {
             this.mContext = context;
         }
 

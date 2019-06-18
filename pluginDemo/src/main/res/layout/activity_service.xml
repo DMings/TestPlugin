@@ -15,8 +15,21 @@
         android:text="启动Service"/>
 
     <Button
+            android:id="@+id/btn_bind"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="绑定Service"/>
+
+    <Button
+            android:id="@+id/btn_unbind"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="解除Service"/>
+
+    <Button
         android:id="@+id/btn_stop"
-        android:layout_marginTop="10dp"
         android:textAllCaps="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

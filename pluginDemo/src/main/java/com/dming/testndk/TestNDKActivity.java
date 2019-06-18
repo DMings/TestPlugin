@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.dming.simple.PluginManager;
 import com.dming.simple.plugin.activity.PluginActivity;
 import com.dming.simple.utils.DLog;
-import com.dming.testndk.one.OneActivity;
 
 public class TestNDKActivity extends PluginActivity {
 
@@ -29,10 +28,10 @@ public class TestNDKActivity extends PluginActivity {
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                        (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)  != PackageManager.PERMISSION_GRANTED ||
-                                checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)  != PackageManager.PERMISSION_GRANTED)) {
-                    Toast.makeText(TestNDKActivity.this,"我是在插件弹出来的权限请求",Toast.LENGTH_SHORT).show();
-                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},666);
+                        (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                                checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
+                    Toast.makeText(TestNDKActivity.this, "我是在插件弹出来的权限请求", Toast.LENGTH_SHORT).show();
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 666);
                 }
             }
         });
@@ -40,7 +39,7 @@ public class TestNDKActivity extends PluginActivity {
         findViewById(R.id.testBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(TestNDKActivity.this, OneActivity.class));
+                startActivity(new Intent(TestNDKActivity.this, TestServiceActivity.class));
             }
         });
 
@@ -48,17 +47,30 @@ public class TestNDKActivity extends PluginActivity {
             @Override
             public void onClick(View v) {
                 String ndkMsg = getMsgFromNDK();
-                Toast.makeText(TestNDKActivity.this,ndkMsg,Toast.LENGTH_SHORT).show();
+                Toast.makeText(TestNDKActivity.this, ndkMsg, Toast.LENGTH_SHORT).show();
+            }
+        });
+        findViewById(R.id.testReceiver).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent();
+                intent1.setAction("android.intent.action.xxx");
+                TestNDKActivity.this.sendBroadcast(intent1);
             }
         });
         findViewById(R.id.testProvider).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String toProviderName = "com.dming.testndk";
-                Uri uri = Uri.parse("content://"+toProviderName+"/testPath_xxxxxxxx");
+                Uri uri = Uri.parse("content://" + toProviderName + "/testPath_xxxxxxxx");
                 Cursor cursor = PluginManager.getContentResolver().query(uri, null, null, null, null);
                 try {
-                    DLog.e("Cursor = " + cursor);
+                    DLog.i("Cursor = " + cursor);
+                    if (cursor != null) {
+                        String str = cursor.getString(789);
+                        DLog.i("cursor.getString: " + str);
+                        Toast.makeText(TestNDKActivity.this.getApplicationContext(), "TestNDKActivity cursor.getString: " + str, Toast.LENGTH_LONG).show();
+                    }
                 } finally {
                     if (cursor != null) {
                         cursor.close();

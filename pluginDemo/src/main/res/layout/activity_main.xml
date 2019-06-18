@@ -27,7 +27,7 @@
         android:textAllCaps="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="插件内Activity跳转" />
+        android:text="测试service和主题" />
 
     <Button
             android:id="@+id/testProvider"
@@ -35,5 +35,13 @@
             android:textAllCaps="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="插件内Provider测试" />
+            android:text="测试Provider" />
+
+    <Button
+            android:id="@+id/testReceiver"
+            android:layout_marginTop="10dp"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试Receiver" />
 </LinearLayout>

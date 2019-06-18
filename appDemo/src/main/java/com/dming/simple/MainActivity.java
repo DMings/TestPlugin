@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         if (!b) {
             b = true;
-            SPlugin.initPlugin(this, "NDK_1.0.5.apk", new OnPluginInitListener() {
+            SPlugin.initPlugin(this, "NDK_1.0.6.apk", new OnPluginInitListener() {
                 @Override
                 public void onSuccess() {
                     Toast.makeText(MainActivity.this, "插件加载成功", Toast.LENGTH_SHORT).show();
@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, TestHostActivity.class));
-                startActivity(new Intent(MainActivity.this, TestHostActivity2.class));
             }
         });
 
@@ -97,10 +96,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent1 = new Intent();
                 intent1.setAction("android.intent.action.xxx");
                 MainActivity.this.sendBroadcast(intent1);
-
-                Intent intent2 = new Intent();
-                intent2.setAction("android.intent.action.bbbb");
-                MainActivity.this.sendBroadcast(intent2);
             }
         });
         findViewById(R.id.btn_provider).setOnClickListener(new View.OnClickListener() {
@@ -111,7 +106,12 @@ public class MainActivity extends AppCompatActivity {
                 Uri uri = Uri.parse("content://"+ ProviderDispatch.AUTHORITIES +"/"+toProviderName+"/"+path);
                 Cursor cursor = getContentResolver().query(uri, null, null, null, null);
                 try {
-                    DLog.e("Cursor = " + cursor);
+                    DLog.i("Cursor = " + cursor);
+                    if (cursor != null) {
+                        String str = cursor.getString(789);
+                        DLog.i("cursor.getString: " + str);
+                        Toast.makeText(MainActivity.this.getApplicationContext(), "MainActivity cursor.getString: " + str, Toast.LENGTH_LONG).show();
+                    }
                 } finally {
                     if (cursor != null) {
                         cursor.close();

@@ -4,23 +4,22 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.dming.simple.utils.DLog;
 
 public class TestContentProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
-        Log.i("DMUI","TestContentProvider onCreate");
+        DLog.i("TestContentProvider onCreate");
         return true;
     }
 
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
-        Log.i("DMUI","TestContentProvider query");
-        return null;
+        DLog.i("TestContentProvider query");
+        return new TestCursor();
     }
 
     @Nullable
