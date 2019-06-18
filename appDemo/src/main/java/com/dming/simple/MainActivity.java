@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
                 ComponentName cn = new ComponentName(MainActivity.this.getPackageName(), "com.dming.testndk.TestNDKActivity");
                 intent.setComponent(cn);
                 ActPlugin.startActivity(MainActivity.this, intent, -1, null);
-                overridePendingTransition(R.anim.enteralpha,R.anim.exitalpha);
             }
         });
 
