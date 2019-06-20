@@ -11,19 +11,15 @@ import java.util.Map;
 
 public class ProPlugin {
 
-    public static Map<String,ContentProvider> sContentProviderMap = new HashMap<>();
+    static Map<String,ContentProvider> sContentProviderMap = new HashMap<>();
 
-    public static void addContentProvider(String name,ContentProvider contentProvider) {
+    private static void addContentProvider(String name, ContentProvider contentProvider) {
         sContentProviderMap.put(name,contentProvider);
-    }
-
-    public static void clearContentProviderMap() {
-        sContentProviderMap.clear();
     }
 
     public static void dealPluginProvider(PackageInfo pInfo) {
         ProviderInfo[] providers = pInfo.providers;
-        clearContentProviderMap();
+        clear();
         for (ProviderInfo providerInfo : providers) {
             DLog.i("SPlugin ProviderInfo>" + providerInfo.authority + " -> " + providerInfo.name);
             try {
@@ -37,6 +33,11 @@ public class ProPlugin {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void clear() {
+        sContentProviderMap.clear();
+        ProPitEvent.sProPitEvent = null;
     }
 
 }

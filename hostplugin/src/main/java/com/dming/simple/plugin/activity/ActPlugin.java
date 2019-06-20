@@ -15,9 +15,9 @@ import java.util.Map;
 
 public class ActPlugin {
 
-    public static HashMap<String, String> sHostActMap = new HashMap<>();
+    static HashMap<String, String> sHostActMap = new HashMap<>();
     private static HashMap<String, ActivityInfo> sPluginActMap = new HashMap<>();
-    public static final String PLUGIN_START_NAME = "com.dming.simple.Activity";
+    private static final String PLUGIN_START_NAME = "com.dming.simple.Activity";
     public static String sPackageName;
 
 
@@ -84,6 +84,12 @@ public class ActPlugin {
             DLog.i("Plugin activityInfo>" + activityInfo.name + " packageName: " + activityInfo.packageName);
             sPluginActMap.put(activityInfo.name, activityInfo);
         }
+    }
+
+    public static void clear() {
+        sHostActMap.clear();
+        sPluginActMap.clear();
+        ActPitEvent.sActPitEvent = null;
     }
 
 }

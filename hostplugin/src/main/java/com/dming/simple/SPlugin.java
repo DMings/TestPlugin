@@ -3,12 +3,10 @@ package com.dming.simple;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.content.res.XmlResourceParser;
 import android.os.Handler;
 import android.os.Looper;
 import com.dming.simple.plugin.activity.ActPitEvent;
@@ -21,7 +19,6 @@ import com.dming.simple.plugin.service.ServicePlugin;
 import com.dming.simple.utils.DLog;
 import com.dming.simple.utils.FileUtils;
 import dalvik.system.DexClassLoader;
-import org.xmlpull.v1.XmlPullParser;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,26 +73,22 @@ public class SPlugin {
 
     public static void initPlugin(final Context context, final String assetName, final OnPluginInitListener onPluginInitListener) {
         final SPlugin sPlugin = getInstance();
-        if (sPlugin.isPatchClassLoader()) {
-            sPlugin.initPlugin(context, onPluginInitListener, new PluginRunnable() {
-                @Override
-                public File getApkFile() throws IOException {
-                    return sPlugin.getPluginApkFromAsset(context, assetName);
-                }
-            });
-        }
+        sPlugin.initPlugin(context, onPluginInitListener, new PluginRunnable() {
+            @Override
+            public File getApkFile() throws IOException {
+                return sPlugin.getPluginApkFromAsset(context, assetName);
+            }
+        });
     }
 
     public static void initPlugin(final Context context, final File pluginApkFile, final OnPluginInitListener onPluginInitListener) {
         final SPlugin sPlugin = getInstance();
-        if (sPlugin.isPatchClassLoader()) {
-            sPlugin.initPlugin(context, onPluginInitListener, new PluginRunnable() {
-                @Override
-                public File getApkFile() throws IOException {
-                    return sPlugin.getPluginApkFromFile(context, pluginApkFile);
-                }
-            });
-        }
+        sPlugin.initPlugin(context, onPluginInitListener, new PluginRunnable() {
+            @Override
+            public File getApkFile() throws IOException {
+                return sPlugin.getPluginApkFromFile(context, pluginApkFile);
+            }
+        });
     }
 
     private void initPlugin(final Context context, final OnPluginInitListener onPluginInitListener, final PluginRunnable pluginRunnable) {
@@ -244,6 +237,13 @@ public class SPlugin {
 
     public interface PluginRunnable {
         File getApkFile() throws IOException;
+    }
+
+    public static void clear(Context context){
+        ActPlugin.clear();
+        ProPlugin.clear();
+        RecPlugin.clear(context);
+        ServicePlugin.clear();
     }
 
 }

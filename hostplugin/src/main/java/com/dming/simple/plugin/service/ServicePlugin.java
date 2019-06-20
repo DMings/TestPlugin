@@ -15,22 +15,9 @@ import java.util.Map;
 
 public class ServicePlugin {
 
-    public static HashMap<String, String> sHostServiceMap = new HashMap<>();
+    static HashMap<String, String> sHostServiceMap = new HashMap<>();
     private static HashMap<String, ServiceInfo> sPluginServiceMap = new HashMap<>();
     private static final String PLUGIN_START_NAME = "com.dming.simple.Service";
-
-//    private static volatile ServicePitEvent sServicePitEvent;
-//
-//    public static ServicePlugin getInstance() {
-//        if (sServicePlugin == null) {
-//            synchronized (ServicePlugin.class) {
-//                if (sServicePlugin == null) {
-//                    sServicePlugin = new ServicePlugin();
-//                }
-//            }
-//        }
-//        return sServicePlugin;
-//    }
 
     public interface VerifyOperation{
         boolean check();
@@ -174,6 +161,12 @@ public class ServicePlugin {
             DLog.i("Plugin serviceInfo>" + serviceInfo.name + " packageName: " + serviceInfo.packageName);
             sPluginServiceMap.put(serviceInfo.name, serviceInfo);
         }
+    }
+
+    public static void clear() {
+        sHostServiceMap.clear();
+        sPluginServiceMap.clear();
+        ServicePitEvent.sActPitEvent = null;
     }
 
 }

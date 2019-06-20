@@ -1,8 +1,6 @@
 package com.dming.simple;
 
 import android.content.*;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.*;
@@ -10,38 +8,30 @@ import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.AppComponentFactory;
 import com.dming.simple.plugin.activity.ActPlugin;
 import com.dming.simple.plugin.provider.ProPitEvent;
 import com.dming.simple.plugin.provider.ProviderDispatch;
 import com.dming.simple.plugin.service.ServicePlugin;
 import com.dming.simple.utils.DLog;
 
-import java.text.SimpleDateFormat;
-
 
 public class MainActivity extends AppCompatActivity {
-
-    private static boolean b = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (!b) {
-            b = true;
-            SPlugin.initPlugin(this, "NDK_1.0.6.apk", new OnPluginInitListener() {
-                @Override
-                public void onSuccess() {
-                    Toast.makeText(MainActivity.this, "插件加载成功", Toast.LENGTH_SHORT).show();
-                }
+        SPlugin.initPlugin(this, "NDK_1.0.6.apk", new OnPluginInitListener() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(MainActivity.this, "插件加载成功", Toast.LENGTH_SHORT).show();
+            }
 
-                @Override
-                public void onFailure() {
-                    Toast.makeText(MainActivity.this, "插件加载失败", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+            @Override
+            public void onFailure() {
+                Toast.makeText(MainActivity.this, "插件加载失败", Toast.LENGTH_SHORT).show();
+            }
+        });
         findViewById(R.id.btn_host).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(myReceiver);
+        SPlugin.clear(this);
     }
 
     private MyReceiver myReceiver = new MyReceiver();

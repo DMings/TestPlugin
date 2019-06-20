@@ -21,34 +21,28 @@ import java.util.Map;
 
 public class RecPlugin {
 
-    public static final String RECEIVER_NAME = BroadcastReceiverDispatch.class.getName();
-    public final static String PLUGIN_RECEIVER_FLAG = "pluginReceiver";
-    private static List<SubBroadcastReceiver> mBroadcastReceiverList = new ArrayList<>();
+    private final static String PLUGIN_RECEIVER_FLAG = "pluginReceiver";
+    private static List<SubBroadcastReceiver> sBroadcastReceiverList = new ArrayList<>();
 
-    public static void addSubBroadcastReceiver(SubBroadcastReceiver subBroadcastReceiver) {
-        mBroadcastReceiverList.add(subBroadcastReceiver);
+    private static void addSubBroadcastReceiver(SubBroadcastReceiver subBroadcastReceiver) {
+        sBroadcastReceiverList.add(subBroadcastReceiver);
     }
 
-    public static void clearBroadcastReceiverList(Context context) {
-        unRegisterBroadcastReceiver(context);
-        mBroadcastReceiverList.clear();
-    }
-
-    public static void registerBroadcastReceiver(Context context) {
-        for (SubBroadcastReceiver subReceiver : mBroadcastReceiverList) {
+    private static void registerBroadcastReceiver(Context context) {
+        for (SubBroadcastReceiver subReceiver : sBroadcastReceiverList) {
             context.registerReceiver(subReceiver.getReceiver(), subReceiver.getFilter() != null ?
                     subReceiver.getFilter() : new IntentFilter());
             DLog.i("subReceiver>" + subReceiver.getReceiver().getClass().getSimpleName());
         }
     }
 
-    public static void unRegisterBroadcastReceiver(Context context) {
-        for (SubBroadcastReceiver subReceiver : mBroadcastReceiverList) {
+    private static void unRegisterBroadcastReceiver(Context context) {
+        for (SubBroadcastReceiver subReceiver : sBroadcastReceiverList) {
             context.unregisterReceiver(subReceiver.getReceiver());
         }
     }
 
-    public static XmlBean getXmlBeanByName(String name, XmlBean xmlBean) {
+    private static XmlBean getXmlBeanByName(String name, XmlBean xmlBean) {
         if (name.equals(xmlBean.getName())) {
             return xmlBean;
         } else if (xmlBean.getSon() != null) {
@@ -99,7 +93,8 @@ public class RecPlugin {
 
     public static void dealPluginReceiver(Context context, PackageInfo pInfo, Resources resource) {
         ActivityInfo[] receivers = pInfo.receivers;
-        clearBroadcastReceiverList(context);
+//        clearBroadcastReceiverList(context);
+        sBroadcastReceiverList.clear();
         ////////
         final Map<String, HashMap<String, ArrayList<String>>> receiverMap = new HashMap<>();
         XmlBean xmlBean;
@@ -191,8 +186,8 @@ public class RecPlugin {
         return xmlBean;
     }
 
-    public static void dispatchReceiver(Context context, Intent intent) {
-        for (SubBroadcastReceiver subReceiver : mBroadcastReceiverList) {
+    static void dispatchReceiver(Context context, Intent intent) {
+        for (SubBroadcastReceiver subReceiver : sBroadcastReceiverList) {
             DLog.i("subReceiver.getReceiver Name " + subReceiver.getReceiver().getClass().getSimpleName());
             String recName = intent.getStringExtra(PLUGIN_RECEIVER_FLAG);
             if (recName != null &&
@@ -200,6 +195,11 @@ public class RecPlugin {
                 subReceiver.getReceiver().onReceive(context, intent);
             }
         }
+    }
+
+    public static void clear(Context context) {
+        unRegisterBroadcastReceiver(context);
+        sBroadcastReceiverList.clear();
     }
 
 }

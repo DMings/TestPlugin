@@ -7,7 +7,7 @@ import com.dming.simple.utils.DLog;
 
 public class ActPitEvent {
 
-    private static volatile ActPitEvent sActPitEvent;
+    static volatile ActPitEvent sActPitEvent;
 
     public static ActPitEvent getInstance() {
         if (sActPitEvent == null) {

@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class ProPitEvent {
 
-    private static volatile ProPitEvent sProPitEvent;
+    static volatile ProPitEvent sProPitEvent;
 
     public static ProPitEvent getInstance() {
         if (sProPitEvent == null) {

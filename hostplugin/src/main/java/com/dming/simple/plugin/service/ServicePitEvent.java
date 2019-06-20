@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class ServicePitEvent {
 
-    private volatile static ServicePitEvent sActPitEvent;
+    volatile static ServicePitEvent sActPitEvent;
 
     public static ServicePitEvent getInstance() {
         if (sActPitEvent == null) {
