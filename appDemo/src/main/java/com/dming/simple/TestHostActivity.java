@@ -8,6 +8,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.dming.simple.utils.DLog;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
 public class TestHostActivity extends AppCompatActivity {
 
     @Override
@@ -44,6 +48,17 @@ public class TestHostActivity extends AppCompatActivity {
                     DLog.i("uri: " + uri.toString());
                     String path = UriUtils.getFilePathFromUri(this, uri);
                     DLog.i("path: " + path);
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(uri);
+                        DLog.i("inputStream: " + inputStream);
+                        if(inputStream != null){
+                            inputStream.close();
+                        }
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
