@@ -1,8 +1,12 @@
 package com.dming.simple;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,12 +28,26 @@ public class TestHostActivity extends AppCompatActivity {
         findViewById(R.id.btn_test).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                startService(new Intent(TestHostActivity.this,TestHostService.class));
+                bindService(new Intent(TestHostActivity.this, TestHostService.class), new ServiceConnection() {
+                    @Override
+                    public void onServiceConnected(ComponentName name, IBinder service) {
+                        DLog.i("TestHostActivity onServiceConnected");
+                        startActivity(new Intent(TestHostActivity.this, TestHostActivity2.class));
+                    }
+
+                    @Override
+                    public void onServiceDisconnected(ComponentName name) {
+
+                    }
+                }, Context.BIND_AUTO_CREATE);
+
 //                Toast.makeText(TestHostActivity.this, TestHostActivity.this.getString(R.string.test_toast),Toast.LENGTH_SHORT).show();
-//                startActivity(new Intent(TestHostActivity.this, TestHostActivity2.class));
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                startActivityForResult(intent, 1);
+//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+//                intent.addCategory(Intent.CATEGORY_OPENABLE);
+//                startActivityForResult(intent, 1);
             }
         });
     }

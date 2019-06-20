@@ -24,6 +24,7 @@
                 <!--android:enabled="true"-->
                 <!--android:exported="true">-->
         <!--</receiver>-->
+        <service android:name=".TestHostService"/>
     </application>
 
 </manifest>

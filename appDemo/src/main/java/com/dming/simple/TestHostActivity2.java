@@ -1,6 +1,11 @@
 package com.dming.simple;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
@@ -17,8 +22,18 @@ public class TestHostActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(TestHostActivity2.this, TestHostActivity2.this.getString(R.string.test_toast), Toast.LENGTH_SHORT).show();
-//                getContentResolver().regi
-//                Looper.getMainLooper().quit();
+                startService(new Intent(TestHostActivity2.this,TestHostService.class));
+                bindService(new Intent(TestHostActivity2.this, TestHostService.class), new ServiceConnection() {
+                    @Override
+                    public void onServiceConnected(ComponentName name, IBinder service) {
+                        DLog.i("TestHostActivity2 onServiceConnected");
+                    }
+
+                    @Override
+                    public void onServiceDisconnected(ComponentName name) {
+
+                    }
+                }, Context.BIND_AUTO_CREATE);
             }
         });
     }
