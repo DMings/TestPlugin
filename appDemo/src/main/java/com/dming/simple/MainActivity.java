@@ -1,6 +1,8 @@
 package com.dming.simple;
 
 import android.content.*;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.*;
@@ -14,6 +16,8 @@ import com.dming.simple.plugin.provider.ProPitEvent;
 import com.dming.simple.plugin.provider.ProviderDispatch;
 import com.dming.simple.plugin.service.ServicePlugin;
 import com.dming.simple.utils.DLog;
+
+import java.text.SimpleDateFormat;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -41,6 +45,14 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_host).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                try {
+//                    PackageManager packageManager = getPackageManager();
+//                    PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
+//                    SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //设置格式
+//                    DLog.i("firstInstallTime: " + format.format(packageInfo.firstInstallTime)+" lastUpdateTime: " + format.format(packageInfo.lastUpdateTime));
+//                } catch (PackageManager.NameNotFoundException e) {
+//                    e.printStackTrace();
+//                }
                 startActivity(new Intent(MainActivity.this, TestHostActivity.class));
             }
         });
@@ -104,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final String toProviderName = "com.dming.testndk";
                 String path = "testPath";
-                Uri uri = Uri.parse("content://"+ ProviderDispatch.AUTHORITIES +"/"+toProviderName+"/"+path);
+                Uri uri = Uri.parse("content://" + ProviderDispatch.AUTHORITIES + "/" + toProviderName + "/" + path);
                 Cursor cursor = getContentResolver().query(uri, null, null, null, null);
                 try {
                     DLog.i("Cursor = " + cursor);
@@ -119,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                Uri uri2 = Uri.parse("content://"+toProviderName+"/testPath2");
+                Uri uri2 = Uri.parse("content://" + toProviderName + "/testPath2");
                 cursor = ProPitEvent.getInstance().query(uri2, null, null, null, null);
                 try {
                     DLog.e("Cursor2 = " + cursor);
