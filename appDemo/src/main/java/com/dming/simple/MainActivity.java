@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SPlugin.initPlugin(this, "NDK_1.0.6.apk", new OnPluginInitListener() {
+        SPlugin.initPlugin(this, "NDK_1.0.7.apk", new OnPluginInitListener() {
             @Override
             public void onSuccess() {
                 Toast.makeText(MainActivity.this, "插件加载成功", Toast.LENGTH_SHORT).show();
@@ -151,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(myReceiver);
-        SPlugin.clear(this);
     }
 
     private MyReceiver myReceiver = new MyReceiver();

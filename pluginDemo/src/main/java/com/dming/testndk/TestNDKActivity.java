@@ -63,7 +63,7 @@ public class TestNDKActivity extends PluginActivity {
             public void onClick(View v) {
                 String toProviderName = "com.dming.testndk";
                 Uri uri = Uri.parse("content://" + toProviderName + "/testPath_xxxxxxxx");
-                Cursor cursor = PluginManager.getContentResolver().query(uri, null, null, null, null);
+                Cursor cursor = PluginManager.query(TestNDKActivity.this, uri, null, null, null, null);
                 try {
                     DLog.i("Cursor = " + cursor);
                     if (cursor != null) {

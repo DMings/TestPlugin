@@ -1,7 +1,10 @@
 package com.dming.simple.plugin.activity;
 
 
-import android.content.*;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.ApplicationInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
@@ -77,15 +80,15 @@ public class PluginContext extends ContextThemeWrapper {
                 v = (View) construct.newInstance(context, attrs);
             } while (false);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         } catch (InstantiationException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
 //        DLog.i("handleCreateView name: " + name + " v: " + v);
         return v;
@@ -155,8 +158,4 @@ public class PluginContext extends ContextThemeWrapper {
         return super.stopService(name);
     }
 
-    @Override
-    public ContentResolver getContentResolver() {
-        return super.getContentResolver();
-    }
 }

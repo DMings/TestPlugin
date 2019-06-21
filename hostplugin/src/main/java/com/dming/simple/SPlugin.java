@@ -62,12 +62,14 @@ public class SPlugin {
 
     public static void init(Application application) {
         SPlugin sPlugin = getInstance();
-        boolean b = PatchClassLoaderUtils.patch(application);
-        sPlugin.setPatchClassLoader(b);
-        if (b) {
-            DLog.i("Patch ClassLoader success");
-        } else {
-            DLog.i("Patch ClassLoader false");
+        if(!sPlugin.isPatchClassLoader()){
+            boolean b = PatchClassLoaderUtils.patch(application);
+            sPlugin.setPatchClassLoader(b);
+            if (b) {
+                DLog.i("Patch ClassLoader success");
+            } else {
+                DLog.i("Patch ClassLoader false");
+            }
         }
     }
 
@@ -92,8 +94,8 @@ public class SPlugin {
     }
 
     private void initPlugin(final Context context, final OnPluginInitListener onPluginInitListener, final PluginRunnable pluginRunnable) {
-        if (isPatchClassLoader()) {
-            new Thread(new Runnable() {
+        if (!isLoadPlugin() && isPatchClassLoader()) {
+            Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
@@ -116,7 +118,9 @@ public class SPlugin {
                         }
                     });
                 }
-            }).start();
+            });
+            t.setDaemon(true);
+            t.start();
         }
     }
 
@@ -198,15 +202,16 @@ public class SPlugin {
             Field resources = pluginClass.getDeclaredField("sResources");
             Field applicationInfo = pluginClass.getDeclaredField("sApplicationInfo");
             Field classLoader = pluginClass.getDeclaredField("sClassLoader");
-            pluginClass.getDeclaredMethod("setPicEvent", Object.class, Object.class,Object.class)
+            pluginClass.getDeclaredMethod("setPicEvent", Object.class, Object.class, Object.class)
                     .invoke(null, ActPitEvent.getInstance(), ServicePitEvent.getInstance(), ProPitEvent.getInstance());
             resources.set(null, resource);
             applicationInfo.set(null, appInfo);
             classLoader.set(null, mClassLoader);
             DLog.i("Plugin appInfo theme>" + Integer.toHexString(appInfo.theme));
+            DLog.i("Plugin applicationInfo name>" + pInfo.applicationInfo.name);
             ActPlugin.obtainPluginActivity(pInfo);
             ServicePlugin.obtainPluginService(pInfo);
-            RecPlugin.dealPluginReceiver(context, pInfo,resource);
+            RecPlugin.dealPluginReceiver(context, pInfo, resource);
             ProPlugin.dealPluginProvider(pInfo);
         }
     }
@@ -239,7 +244,7 @@ public class SPlugin {
         File getApkFile() throws IOException;
     }
 
-    public static void clear(Context context){
+    public static void unUseToClear(Context context) {
         ActPlugin.clear();
         ProPlugin.clear();
         RecPlugin.clear(context);

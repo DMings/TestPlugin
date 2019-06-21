@@ -12,6 +12,7 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
+            android:name=".TestApplication"
             android:theme="@style/AppTheme2"
             tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".TestNDKActivity">

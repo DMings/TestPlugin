@@ -1,2 +1,2 @@
-include ':appDemo', ':hostplugin'
-//include ':appDemo', ':libPlugin',':pluginDemo', ':hostplugin'
+//include ':appDemo', ':hostplugin'
+include ':appDemo', ':libPlugin',':pluginDemo', ':hostplugin'

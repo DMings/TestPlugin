@@ -30,7 +30,7 @@ public class RecPlugin {
 
     private static void registerBroadcastReceiver(Context context) {
         for (SubBroadcastReceiver subReceiver : sBroadcastReceiverList) {
-            context.registerReceiver(subReceiver.getReceiver(), subReceiver.getFilter() != null ?
+            context.getApplicationContext().registerReceiver(subReceiver.getReceiver(), subReceiver.getFilter() != null ?
                     subReceiver.getFilter() : new IntentFilter());
             DLog.i("subReceiver>" + subReceiver.getReceiver().getClass().getSimpleName());
         }
@@ -38,7 +38,7 @@ public class RecPlugin {
 
     private static void unRegisterBroadcastReceiver(Context context) {
         for (SubBroadcastReceiver subReceiver : sBroadcastReceiverList) {
-            context.unregisterReceiver(subReceiver.getReceiver());
+            context.getApplicationContext().unregisterReceiver(subReceiver.getReceiver());
         }
     }
 
