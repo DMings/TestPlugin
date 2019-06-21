@@ -8,28 +8,17 @@
         tools:context=".MainActivity">
 
     <Button
-            android:id="@+id/btn_host"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="StartHostActivity"
-            android:textAllCaps="false"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintBottom_toTopOf="@+id/btn_plugin_act"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-    <Button
             android:id="@+id/btn_plugin_act"
-            android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="StartPluginActivity"
             android:textAllCaps="false"
-            app:layout_constraintBottom_toTopOf="@id/btn_plugin_start_service"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintBottom_toTopOf="@+id/btn_plugin_start_service"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_host"/>
+            app:layout_constraintTop_toTopOf="parent"/>
+
 
     <Button
             android:id="@+id/btn_plugin_start_service"

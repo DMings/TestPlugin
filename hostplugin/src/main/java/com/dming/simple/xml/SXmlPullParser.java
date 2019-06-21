@@ -42,7 +42,7 @@ public class SXmlPullParser {
                         }
                         // 获取全部属性
                         for (int i = xml.getAttributeCount() - 1; i >= 0; i--) {
-                            DLog.d(xml.getAttributeName(i) + ": " + xml.getAttributeValue(i));
+//                            DLog.d(xml.getAttributeName(i) + ": " + xml.getAttributeValue(i));
                             curXmlBean.attributeMap.put(xml.getAttributeName(i), xml.getAttributeValue(i));
                         }
                         break;

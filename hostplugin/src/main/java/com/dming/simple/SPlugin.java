@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Looper;
 import com.dming.simple.plugin.activity.ActPitEvent;
 import com.dming.simple.plugin.activity.ActPlugin;
+import com.dming.simple.plugin.app.AppPlugin;
 import com.dming.simple.plugin.provider.ProPitEvent;
 import com.dming.simple.plugin.provider.ProPlugin;
 import com.dming.simple.plugin.receiver.RecPlugin;
@@ -207,8 +208,7 @@ public class SPlugin {
             resources.set(null, resource);
             applicationInfo.set(null, appInfo);
             classLoader.set(null, mClassLoader);
-            DLog.i("Plugin appInfo theme>" + Integer.toHexString(appInfo.theme));
-            DLog.i("Plugin applicationInfo name>" + pInfo.applicationInfo.name);
+            AppPlugin.dealPluginApp(pInfo);
             ActPlugin.obtainPluginActivity(pInfo);
             ServicePlugin.obtainPluginService(pInfo);
             RecPlugin.dealPluginReceiver(context, pInfo, resource);

@@ -1,6 +1,9 @@
 package com.dming.simple;
 
-import android.content.*;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.*;
@@ -21,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SPlugin.initPlugin(this, "NDK_1.0.7.apk", new OnPluginInitListener() {
+        SPlugin.initPlugin(this, "NDK_1.0.8.apk", new OnPluginInitListener() {
             @Override
             public void onSuccess() {
                 Toast.makeText(MainActivity.this, "插件加载成功", Toast.LENGTH_SHORT).show();
@@ -30,20 +33,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure() {
                 Toast.makeText(MainActivity.this, "插件加载失败", Toast.LENGTH_SHORT).show();
-            }
-        });
-        findViewById(R.id.btn_host).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                try {
-//                    PackageManager packageManager = getPackageManager();
-//                    PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
-//                    SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //设置格式
-//                    DLog.i("firstInstallTime: " + format.format(packageInfo.firstInstallTime)+" lastUpdateTime: " + format.format(packageInfo.lastUpdateTime));
-//                } catch (PackageManager.NameNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-                startActivity(new Intent(MainActivity.this, TestHostActivity.class));
             }
         });
 
@@ -132,28 +121,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("abcdefg");
-        registerReceiver(myReceiver, intentFilter);
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(myReceiver);
-    }
-
-    private MyReceiver myReceiver = new MyReceiver();
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {

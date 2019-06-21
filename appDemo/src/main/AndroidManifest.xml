@@ -7,7 +7,7 @@
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:name="com.dming.simple.MyApp"
-            android:roundIcon="@mipmap/ic_launcher_round"
+            android:roundIcon="@mipmap/ic_launcher"
             android:supportsRtl="true"
             android:theme="@style/AppTheme" tools:ignore="GoogleAppIndexingWarning">
         <activity android:name="com.dming.simple.MainActivity">
@@ -17,14 +17,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".TestHostActivity"/>
-        <activity android:name=".TestHostActivity2"/>
-        <!--<receiver-->
-                <!--android:name="com.dming.simple.MyReceiver"-->
-                <!--android:enabled="true"-->
-                <!--android:exported="true">-->
-        <!--</receiver>-->
-        <service android:name=".TestHostService"/>
     </application>
 
 </manifest>
