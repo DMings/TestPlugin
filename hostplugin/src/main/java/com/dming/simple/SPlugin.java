@@ -11,7 +11,7 @@ import android.os.Handler;
 import android.os.Looper;
 import com.dming.simple.plugin.activity.ActPitEvent;
 import com.dming.simple.plugin.activity.ActPlugin;
-import com.dming.simple.plugin.app.AppPlugin;
+import com.dming.simple.plugin.AppPlugin;
 import com.dming.simple.plugin.provider.ProPitEvent;
 import com.dming.simple.plugin.provider.ProPlugin;
 import com.dming.simple.plugin.receiver.RecPlugin;

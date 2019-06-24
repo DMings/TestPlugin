@@ -7,7 +7,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.dming.testplugin"
+        applicationId "com.dming.simple"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1

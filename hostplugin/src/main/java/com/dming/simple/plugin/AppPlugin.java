@@ -1,4 +1,4 @@
-package com.dming.simple.plugin.app;
+package com.dming.simple.plugin;
 
 import android.app.Application;
 import android.content.pm.PackageInfo;
@@ -21,7 +21,6 @@ public class AppPlugin {
                 e.printStackTrace();
             }
         }
-
     }
 
 }
