@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.*;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
@@ -85,14 +86,15 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_receiver).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1 = new Intent();
-                intent1.setAction("android.intent.action.xxx");
-                MainActivity.this.sendBroadcast(intent1);
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.xxx");
+                MainActivity.this.sendBroadcast(intent);
             }
         });
         findViewById(R.id.btn_provider).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 其他进程或者本进程
                 final String toProviderName = "com.dming.testndk";
                 String path = "testPath";
                 Uri uri = Uri.parse("content://" + ProviderDispatch.AUTHORITIES + "/" + toProviderName + "/" + path);
@@ -100,16 +102,16 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     DLog.i("Cursor = " + cursor);
                     if (cursor != null) {
-                        String str = cursor.getString(789);
-                        DLog.i("cursor.getString: " + str);
-                        Toast.makeText(MainActivity.this.getApplicationContext(), "MainActivity cursor.getString: " + str, Toast.LENGTH_LONG).show();
+                        int count = cursor.getCount();
+                        Log.i("DMUI","cursor count: " + count);
+                        Toast.makeText(MainActivity.this.getApplicationContext(), "MainActivity cursor count: " + count, Toast.LENGTH_LONG).show();
                     }
                 } finally {
                     if (cursor != null) {
                         cursor.close();
                     }
                 }
-
+                //  仅本进程
                 Uri uri2 = Uri.parse("content://" + toProviderName + "/testPath2");
                 cursor = ProPitEvent.getInstance().query(uri2, null, null, null, null);
                 try {

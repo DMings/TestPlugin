@@ -101,7 +101,7 @@ public class TestCursor implements Cursor {
 
     @Override
     public String getString(int columnIndex) {
-        return "getString=>"+columnIndex;
+        return null;
     }
 
     @Override

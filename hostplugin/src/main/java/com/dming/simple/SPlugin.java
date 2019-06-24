@@ -122,6 +122,12 @@ public class SPlugin {
             });
             t.setDaemon(true);
             t.start();
+        }else {
+            if (isLoadPlugin()) {
+                onPluginInitListener.onSuccess();
+            } else {
+                onPluginInitListener.onFailure();
+            }
         }
     }
 

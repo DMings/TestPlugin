@@ -21,15 +21,15 @@ import java.util.Map;
 
 public class RecPlugin {
 
-    private final static String PLUGIN_RECEIVER_FLAG = "pluginReceiver";
-    private static List<SubBroadcastReceiver> sBroadcastReceiverList = new ArrayList<>();
+    private final static String PLUGIN_RECEIVER_FLAG = "PluginReceiverName";
+    private static List<SubReceiver> sBroadcastReceiverList = new ArrayList<>();
 
-    private static void addSubBroadcastReceiver(SubBroadcastReceiver subBroadcastReceiver) {
-        sBroadcastReceiverList.add(subBroadcastReceiver);
+    private static void addSubBroadcastReceiver(SubReceiver subReceiver) {
+        sBroadcastReceiverList.add(subReceiver);
     }
 
     private static void registerBroadcastReceiver(Context context) {
-        for (SubBroadcastReceiver subReceiver : sBroadcastReceiverList) {
+        for (SubReceiver subReceiver : sBroadcastReceiverList) {
             context.getApplicationContext().registerReceiver(subReceiver.getReceiver(), subReceiver.getFilter() != null ?
                     subReceiver.getFilter() : new IntentFilter());
             DLog.i("subReceiver>" + subReceiver.getReceiver().getClass().getSimpleName());
@@ -37,7 +37,7 @@ public class RecPlugin {
     }
 
     private static void unRegisterBroadcastReceiver(Context context) {
-        for (SubBroadcastReceiver subReceiver : sBroadcastReceiverList) {
+        for (SubReceiver subReceiver : sBroadcastReceiverList) {
             context.getApplicationContext().unregisterReceiver(subReceiver.getReceiver());
         }
     }
@@ -162,7 +162,7 @@ public class RecPlugin {
                         }
                     }
                 }
-                addSubBroadcastReceiver(new SubBroadcastReceiver((BroadcastReceiver) receiver.newInstance(), intentFilter));
+                addSubBroadcastReceiver(new SubReceiver((BroadcastReceiver) receiver.newInstance(), intentFilter));
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -187,12 +187,21 @@ public class RecPlugin {
     }
 
     static void dispatchReceiver(Context context, Intent intent) {
-        for (SubBroadcastReceiver subReceiver : sBroadcastReceiverList) {
-            DLog.i("subReceiver.getReceiver Name " + subReceiver.getReceiver().getClass().getSimpleName());
-            String recName = intent.getStringExtra(PLUGIN_RECEIVER_FLAG);
-            if (recName != null &&
-                    subReceiver.getReceiver().getClass().getSimpleName().equals(recName)) {
-                subReceiver.getReceiver().onReceive(context, intent);
+        String recName = intent.getStringExtra(PLUGIN_RECEIVER_FLAG);
+        if (recName != null) { // 存在直接匹配类名
+            DLog.i("PluginReceiverName: " + recName);
+            for (SubReceiver subReceiver : sBroadcastReceiverList) {
+                if (subReceiver.getReceiver().getClass().getSimpleName().equals(recName)) {
+                    subReceiver.getReceiver().onReceive(context, intent);
+                }
+            }
+        } else { // 类名不存在,匹配intentFile
+            DLog.i("Plugin action: " + intent.getAction());
+            for (SubReceiver subReceiver : sBroadcastReceiverList) {
+                IntentFilter filter = subReceiver.getFilter();
+                if (filter.matchAction(intent.getAction()) && filter.matchCategories(intent.getCategories()) == null) {
+                    subReceiver.getReceiver().onReceive(context, intent);
+                }
             }
         }
     }

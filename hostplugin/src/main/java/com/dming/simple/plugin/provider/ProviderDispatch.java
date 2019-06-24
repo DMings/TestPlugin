@@ -16,7 +16,7 @@ public class ProviderDispatch extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        DLog.i("ProviderDispatch onCreate");
+        DLog.i("ProviderDispatch onCreate: "+Thread.currentThread());
         return true;
     }
 

@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 import com.dming.simple.PluginManager;
@@ -67,9 +68,9 @@ public class TestNDKActivity extends PluginActivity {
                 try {
                     DLog.i("Cursor = " + cursor);
                     if (cursor != null) {
-                        String str = cursor.getString(789);
-                        DLog.i("cursor.getString: " + str);
-                        Toast.makeText(TestNDKActivity.this.getApplicationContext(), "TestNDKActivity cursor.getString: " + str, Toast.LENGTH_LONG).show();
+                        int count = cursor.getCount();
+                        Log.i("DMUI","cursor count: " + count);
+                        Toast.makeText(TestNDKActivity.this.getApplicationContext(), "MainActivity cursor count: " + count, Toast.LENGTH_LONG).show();
                     }
                 } finally {
                     if (cursor != null) {
