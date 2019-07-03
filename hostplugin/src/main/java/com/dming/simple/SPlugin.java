@@ -1,7 +1,6 @@
 package com.dming.simple;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -9,9 +8,9 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Looper;
+import com.dming.simple.plugin.AppPlugin;
 import com.dming.simple.plugin.activity.ActPitEvent;
 import com.dming.simple.plugin.activity.ActPlugin;
-import com.dming.simple.plugin.AppPlugin;
 import com.dming.simple.plugin.provider.ProPitEvent;
 import com.dming.simple.plugin.provider.ProPlugin;
 import com.dming.simple.plugin.receiver.RecPlugin;
@@ -31,19 +30,10 @@ public class SPlugin {
 
     private static volatile SPlugin sSPlugin;
     private ClassLoader mClassLoader;
-    private boolean mPatchClassLoader = false;
     private boolean mLoadPlugin = false;
 
-    public boolean isPatchClassLoader() {
-        return mPatchClassLoader;
-    }
-
     public boolean isLoadPlugin() {
-        return mPatchClassLoader && mLoadPlugin;
-    }
-
-    private void setPatchClassLoader(boolean mPatchClassLoader) {
-        this.mPatchClassLoader = mPatchClassLoader;
+        return mLoadPlugin;
     }
 
     private void setLoadPlugin(boolean mLoadPlugin) {
@@ -59,19 +49,6 @@ public class SPlugin {
             }
         }
         return sSPlugin;
-    }
-
-    public static void init(Application application) {
-        SPlugin sPlugin = getInstance();
-        if(!sPlugin.isPatchClassLoader()){
-            boolean b = PatchClassLoaderUtils.patch(application);
-            sPlugin.setPatchClassLoader(b);
-            if (b) {
-                DLog.i("Patch ClassLoader success");
-            } else {
-                DLog.i("Patch ClassLoader false");
-            }
-        }
     }
 
     public static void initPlugin(final Context context, final String assetName, final OnPluginInitListener onPluginInitListener) {
@@ -95,7 +72,7 @@ public class SPlugin {
     }
 
     private void initPlugin(final Context context, final OnPluginInitListener onPluginInitListener, final PluginRunnable pluginRunnable) {
-        if (!isLoadPlugin() && isPatchClassLoader()) {
+        if (!isLoadPlugin()) {
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -131,24 +108,6 @@ public class SPlugin {
         }
     }
 
-
-    Class<?> loadClass(String className, boolean resolve) throws ClassNotFoundException {
-        Class<?> clazz = null;
-//        DLog.e("loadClass className: " + className);
-        if (mClassLoader != null) {
-            String activity = ActPlugin.solveActClass(className);
-            if (activity != null) {
-                clazz = mClassLoader.loadClass(activity);
-            } else {
-                String service = ServicePlugin.solveServiceClass(className);
-                if (service != null) {
-                    clazz = mClassLoader.loadClass(service);
-                }
-            }
-        }
-        return clazz;
-    }
-
     public ClassLoader getClassLoader() {
         return mClassLoader;
     }
@@ -163,14 +122,6 @@ public class SPlugin {
                 ndkOutputDir.getAbsolutePath(),
                 context.getClassLoader().getParent()
         );
-//        DLog dLog = new DLog(); // Test 不同类加载器，加载相同类,会报错
-//        Class<?> aClass = mClassLoader.loadClass(DLog.class.getName());
-//        try {
-//            dLog = (DLog) aClass.newInstance();
-//            Log.i("Test",dLog.toString());
-//        } catch (InstantiationException e) {
-//            e.printStackTrace();
-//        }
         dealHostPkgInfo(context);
         dealPluginPkgInfo(context, apkFile);
     }

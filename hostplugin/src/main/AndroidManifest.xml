@@ -2,16 +2,6 @@
           package="com.dming.simple">
 
     <application tools:ignore="GoogleAppIndexingWarning" >
-        <activity android:name="com.dming.simple.ActivityS1"/>
-        <activity android:name="com.dming.simple.ActivityS2"/>
-        <activity android:name="com.dming.simple.ActivityS3"/>
-        <activity android:name="com.dming.simple.ActivityS4"/>
-        <activity android:name="com.dming.simple.ActivityS5"/>
-        <activity android:name="com.dming.simple.ActivityS6"/>
-
-        <service android:name="com.dming.simple.ServiceS1"/>
-        <service android:name="com.dming.simple.ServiceS2"/>
-        <service android:name="com.dming.simple.ServiceS3"/>
 
         <provider android:authorities="com.simple.provider"
                   android:name=".plugin.provider.ProviderDispatch" android:exported="true"/>

@@ -32,6 +32,7 @@ public class ActPitEvent {
             intent.setClassName(ActPlugin.sPackageName, activityPit);
             ActivityInfo activityInfo = ActPlugin.getPluginActivityInfo(activityName);
             intent.putExtra("ActivityInfo", activityInfo);
+            intent.putExtra("ClassName",activityName);
             return true;
         }
         return false;
