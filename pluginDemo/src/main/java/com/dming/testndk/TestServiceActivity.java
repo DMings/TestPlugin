@@ -22,7 +22,7 @@ public class TestServiceActivity extends PluginActivity {
         findViewById(R.id.btn_start).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DLog.i( "TestServiceActivity startService");
+                DLog.i("TestServiceActivity startService");
                 startService(new Intent(TestServiceActivity.this, TestService.class));
             }
         });
@@ -30,15 +30,15 @@ public class TestServiceActivity extends PluginActivity {
         findViewById(R.id.btn_bind).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DLog.i( "TestServiceActivity bindService");
-                bindService(new Intent(TestServiceActivity.this, TestService.class),serviceConnection , Context.BIND_AUTO_CREATE);
+                DLog.i("TestServiceActivity bindService");
+                bindService(new Intent(TestServiceActivity.this, TestService.class), serviceConnection, Context.BIND_AUTO_CREATE);
             }
         });
 
         findViewById(R.id.btn_unbind).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DLog.i( "TestServiceActivity unbindService");
+                DLog.i("TestServiceActivity unbindService");
                 unbindService(serviceConnection);
             }
         });
@@ -46,7 +46,7 @@ public class TestServiceActivity extends PluginActivity {
         findViewById(R.id.btn_stop).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DLog.i( "TestServiceActivity stopService");
+                DLog.i("TestServiceActivity stopService");
                 stopService(new Intent(TestServiceActivity.this, TestService.class));
             }
         });
@@ -55,14 +55,22 @@ public class TestServiceActivity extends PluginActivity {
     ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            DLog.i( "TestServiceActivity onServiceConnected");
-            Toast.makeText(TestServiceActivity.this,"onServiceConnected",Toast.LENGTH_SHORT).show();
+            DLog.i("TestServiceActivity onServiceConnected");
+            Toast.makeText(TestServiceActivity.this, "onServiceConnected", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            DLog.i( "TestServiceActivity onServiceDisconnected");
+            DLog.i("TestServiceActivity onServiceDisconnected");
         }
     };
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("act", "TestServiceActivity");
+        setResult(5656, intent);
+        Toast.makeText(this,"setResult: "+5656,Toast.LENGTH_SHORT).show();
+        super.onBackPressed();
+    }
 }

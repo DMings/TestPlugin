@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+import androidx.annotation.Nullable;
 import com.dming.simple.PluginManager;
 import com.dming.simple.plugin.activity.PluginActivity;
 import com.dming.simple.utils.DLog;
@@ -40,7 +41,7 @@ public class TestNDKActivity extends PluginActivity {
         findViewById(R.id.testBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(TestNDKActivity.this, TestServiceActivity.class));
+                startActivityForResult(new Intent(TestNDKActivity.this, TestServiceActivity.class), 8989);
             }
         });
 
@@ -69,7 +70,7 @@ public class TestNDKActivity extends PluginActivity {
                     DLog.i("Cursor = " + cursor);
                     if (cursor != null) {
                         int count = cursor.getCount();
-                        Log.i("DMUI","cursor count: " + count);
+                        Log.i("DMUI", "cursor count: " + count);
                         Toast.makeText(TestNDKActivity.this.getApplicationContext(), "MainActivity cursor count: " + count, Toast.LENGTH_LONG).show();
                     }
                 } finally {
@@ -83,4 +84,19 @@ public class TestNDKActivity extends PluginActivity {
 
     public native String getMsgFromNDK();
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Toast.makeText(this, "requestCode: " + requestCode + " resultCode: " + resultCode + " data: " + data, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("act", "TestNDKActivity");
+        setResult(2323, intent);
+        Toast.makeText(this,"setResult: "+2323,Toast.LENGTH_SHORT).show();
+        super.onBackPressed();
+    }
 }

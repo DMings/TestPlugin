@@ -1,6 +1,6 @@
 package com.dming.simple.plugin.activity;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
@@ -21,19 +21,19 @@ public class ActPlugin {
     public static String sPackageName;
 
 
-    public static void startActivity(Context context, Intent intent, int requestCode, Bundle options) {
+    public static void startActivity(Activity activity, Intent intent, int requestCode, Bundle options) {
         if (SPlugin.getInstance().isLoadPlugin()) {
             boolean b = ActPitEvent.getInstance().startActivityForResult(intent, requestCode, options);
             if (b) {
                 if (intent.getComponent() != null) {
                     DLog.i("startActivity pkgName: " + intent.getComponent().getPackageName() + " component: " + intent.getComponent().getClassName());
                 }
-                context.startActivity(intent);
+                activity.startActivityForResult(intent,requestCode,options);
             } else {
-                SToast.showPluginError(context);
+                SToast.showPluginError(activity);
             }
         } else {
-            SToast.showPluginError(context);
+            SToast.showPluginError(activity);
         }
     }
 

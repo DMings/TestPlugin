@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 ComponentName cn = new ComponentName(MainActivity.this.getPackageName(), "com.dming.testndk.TestNDKActivity");
                 intent.setComponent(cn);
-                ActPlugin.startActivity(MainActivity.this, intent, -1, null);
+                ActPlugin.startActivity(MainActivity.this, intent, 6666, null);
             }
         });
 
@@ -144,5 +144,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Toast.makeText(this, "-requestCode: " + requestCode + " resultCode: " + resultCode + " data: " + data, Toast.LENGTH_SHORT).show();
+    }
 }
 
