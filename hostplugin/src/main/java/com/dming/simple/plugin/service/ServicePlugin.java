@@ -15,9 +15,7 @@ import java.util.Map;
 
 public class ServicePlugin {
 
-    static HashMap<String, String> sHostServiceMap = new HashMap<>();
     private static HashMap<String, ServiceInfo> sPluginServiceMap = new HashMap<>();
-    private static final String PLUGIN_START_NAME = "com.dming.simple.Service";
 
     public interface VerifyOperation{
         boolean check();
@@ -96,63 +94,8 @@ public class ServicePlugin {
         });
     }
 
-    public static String findServicePit(String serviceName) {
-        for (Map.Entry<String, String> entry : sHostServiceMap.entrySet()) {
-            if (serviceName.equals(entry.getValue())) {  // 找到旧坑
-                return entry.getKey();
-            }
-        }
-        for (Map.Entry<String, String> entry : sHostServiceMap.entrySet()) {
-            if (TextUtils.isEmpty(entry.getValue())) {
-                return entry.getKey();
-            }
-        }
-        return null;
-    }
-
-
-    public static String findPluginService(String pluginName) {
-        if (!TextUtils.isEmpty(pluginName)) {
-            for(Map.Entry<String,String> entry : sHostServiceMap.entrySet()){
-                if(pluginName.equals(entry.getValue())){
-                    return entry.getKey();
-                }
-            }
-        }
-        return null;
-    }
-
-    public static String solveServiceClass(String className) {
-        if (className.startsWith(PLUGIN_START_NAME)) {
-            String service = sHostServiceMap.get(className);
-            DLog.i("className: " + className + " service: " + service);
-            return service;
-        }
-        return null;
-    }
-
-    public static void clearServicePit(String pluginName){
-        if (!TextUtils.isEmpty(pluginName)) {
-            for(Map.Entry<String,String> entry : sHostServiceMap.entrySet()){
-                if(pluginName.equals(entry.getValue())){
-                    sHostServiceMap.put(entry.getKey(), null); //清除坑位
-                }
-            }
-        }
-    }
-
     public static ServiceInfo getPluginServiceInfo(String serviceName) {
         return sPluginServiceMap.get(serviceName);
-    }
-
-    public static void obtainHostService(PackageInfo pInfo) {
-        ServiceInfo[] services = pInfo.services;
-        for (ServiceInfo serviceInfo : services) {
-            DLog.i("Host serviceInfo>" + serviceInfo.name + " packageName: " + serviceInfo.packageName);
-            if (serviceInfo.name.startsWith(PLUGIN_START_NAME)) {
-                sHostServiceMap.put(serviceInfo.name, null);
-            }
-        }
     }
 
     public static void obtainPluginService(PackageInfo pInfo) {
@@ -164,7 +107,6 @@ public class ServicePlugin {
     }
 
     public static void clear() {
-        sHostServiceMap.clear();
         sPluginServiceMap.clear();
         ServicePitEvent.sActPitEvent = null;
     }

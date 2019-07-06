@@ -1,11 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
           package="com.dming.simple">
 
-    <application tools:ignore="GoogleAppIndexingWarning" >
+    <application tools:ignore="GoogleAppIndexingWarning">
 
         <provider android:authorities="com.simple.provider"
                   android:name=".plugin.provider.ProviderDispatch" android:exported="true"/>
         <receiver android:name=".plugin.receiver.ReceiverDispatch" android:exported="true"/>
-
+        <activity android:name=".plugin.activity.PluginProxyActivity"/>
+        <service android:name=".plugin.service.PluginProxyService"/>
     </application>
 </manifest>

@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SPlugin.initPlugin(this, "NDK_1.0.8.apk", new OnPluginInitListener() {
+        SPlugin.initPlugin(this, "NDK_1.0.9.apk", new OnPluginInitListener() {
             @Override
             public void onSuccess() {
                 Toast.makeText(MainActivity.this, "插件加载成功", Toast.LENGTH_SHORT).show();
@@ -140,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
 
         public void onServiceDisconnected(ComponentName componentName) {
             DLog.i("onServiceDisconnected: " + componentName.getClassName());
-            ServicePlugin.clearServicePit(componentName.getClassName());
         }
 
     };

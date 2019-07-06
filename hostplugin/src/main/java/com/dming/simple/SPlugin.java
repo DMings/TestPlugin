@@ -31,6 +31,7 @@ public class SPlugin {
     private static volatile SPlugin sSPlugin;
     private ClassLoader mClassLoader;
     private boolean mLoadPlugin = false;
+    private String mHostPkgName;
 
     public boolean isLoadPlugin() {
         return mLoadPlugin;
@@ -126,17 +127,12 @@ public class SPlugin {
         dealPluginPkgInfo(context, apkFile);
     }
 
-    private void dealHostPkgInfo(Context context) throws PackageManager.NameNotFoundException {
-        long time = System.currentTimeMillis();
-        PackageManager packageManager = context.getPackageManager();
-        PackageInfo pInfo = packageManager.getPackageInfo(context.getPackageName(), PackageManager.GET_ACTIVITIES | PackageManager.GET_SERVICES);
-        DLog.i("host time>>>" + (System.currentTimeMillis() - time));
-        if (pInfo != null) {
-            ApplicationInfo appInfo = pInfo.applicationInfo;
-            DLog.i("Host appInfo theme>" + Integer.toHexString(appInfo.theme));
-            ActPlugin.obtainHostActivity(pInfo);
-            ServicePlugin.obtainHostService(pInfo);
-        }
+    private void dealHostPkgInfo(Context context) {
+        this.mHostPkgName = context.getPackageName();
+    }
+
+    public String getHostPkgName() {
+        return mHostPkgName;
     }
 
     private void dealPluginPkgInfo(Context context, File apkFile) throws ClassNotFoundException,

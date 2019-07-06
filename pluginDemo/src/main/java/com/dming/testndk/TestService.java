@@ -1,6 +1,7 @@
 package com.dming.testndk;
 
 import android.annotation.SuppressLint;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -9,11 +10,10 @@ import android.os.Message;
 import android.os.Messenger;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
-import com.dming.simple.plugin.service.PluginService;
 import com.dming.simple.utils.DLog;
 
 @SuppressLint("Registered")
-public class TestService extends PluginService {
+public class TestService extends Service {
 
     public final static int MSG_SAY_HELLO = 911;
     private Messenger mMessenger = new Messenger(new IncomingHandler(this));

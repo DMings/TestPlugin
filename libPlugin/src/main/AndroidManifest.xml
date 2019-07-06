@@ -1,7 +1,3 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.dming.simple">
-    <application>
-        <activity android:name=".plugin.activity.PluginActivity"/>
-        <service android:name=".plugin.service.PluginService"/>
-    </application>
 </manifest>

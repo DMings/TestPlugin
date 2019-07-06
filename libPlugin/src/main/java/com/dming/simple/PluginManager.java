@@ -99,17 +99,6 @@ public class PluginManager {
         return b;
     }
 
-    public static void clearServicePit(String name) {
-        try {
-            Method clearServicePit = PluginManager.sServicePitEvent.getClass()
-                    .getDeclaredMethod("clearServicePit", String.class);
-            clearServicePit.invoke(PluginManager.sServicePitEvent, name);
-        } catch (NoSuchMethodException e) {
-        } catch (IllegalAccessException e) {
-        } catch (InvocationTargetException e) {
-        }
-    }
-
     @Nullable
     public static Cursor query(Context context,@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         DLog.i("PluginContentResolver query: " + uri.toString());
