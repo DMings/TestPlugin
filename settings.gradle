@@ -1,2 +1,3 @@
 include ':appDemo', ':hostplugin'
 //include ':appDemo', ':libPlugin',':pluginDemo', ':hostplugin'
+//include ':pluginDemo', ':libPlugin'

@@ -7,17 +7,24 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import com.dming.simple.SPlugin;
 import com.dming.simple.utils.DLog;
 import com.dming.simple.utils.ReflectUtils;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
-public class PluginProxyActivity extends AppCompatActivity {
+public class PluginProxyActivity extends Activity {
 
     private Activity mClientActivity;
+
+    private static final Field[] ACTIVITY_FIELDS;
+
+    static {
+        ACTIVITY_FIELDS = Activity.class.getDeclaredFields();
+    }
 
     Method ON_ATTACH_BASE_CONTEXT;
     Method ON_CREATE;
@@ -39,7 +46,7 @@ public class PluginProxyActivity extends AppCompatActivity {
     Method ON_NEW_INTENT;
     Method ON_REQUEST_PERMISSIONS_RESULT;
 
-    private void dealActivityMethod(Class activityClass){
+    private void dealActivityMethod(Class activityClass) {
         ON_ATTACH_BASE_CONTEXT = ReflectUtils.getMethod(activityClass, "attachBaseContext", Context.class);
         ON_CREATE = ReflectUtils.getMethod(activityClass, "onCreate", Bundle.class);
         ON_POST_CREATE = ReflectUtils.getMethod(activityClass, "onPostCreate", Bundle.class);
@@ -63,13 +70,36 @@ public class PluginProxyActivity extends AppCompatActivity {
                 int.class, String[].class, int[].class);
     }
 
+    private void attachHostStatus() {
+        for (Field field : ACTIVITY_FIELDS) {
+            DLog.i("field: "+field.getName());
+//            int modifiers = field.getModifiers();
+//            if (Modifier.isStatic(modifiers)
+//                    || Modifier.isFinal(modifiers)
+//                    || Modifier.isVolatile(modifiers)
+//                    || Modifier.isTransient(modifiers)) {
+//                continue;
+//            }
+            DLog.i("field-: "+field.getName());
+            field.setAccessible(true);
+            try {
+                Object fieldsValue = field.get(this); // host
+                field.set(mClientActivity, fieldsValue);// plugin
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         Intent intent = getIntent();
         String className = intent.getStringExtra("ClassName");
         createActivity(className);
-        callTargetActivityMethod(ON_ATTACH_BASE_CONTEXT,this);
-        callTargetActivityMethod(ON_CREATE,savedInstanceState);
+        attachHostStatus();
+        callTargetActivityMethod(ON_ATTACH_BASE_CONTEXT, this);
+        callTargetActivityMethod(ON_CREATE, savedInstanceState);
         super.onCreate(savedInstanceState);
     }
 
@@ -189,7 +219,7 @@ public class PluginProxyActivity extends AppCompatActivity {
             dealActivityMethod(loadClass);
             Object act = loadClass.newInstance();
             if (act instanceof Activity) {
-                mClientActivity = (Activity) loadClass.newInstance();
+                mClientActivity = (Activity) act;
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

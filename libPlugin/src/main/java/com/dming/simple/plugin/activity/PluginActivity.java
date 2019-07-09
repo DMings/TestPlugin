@@ -1,16 +1,16 @@
 package com.dming.simple.plugin.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import com.dming.simple.PluginManager;
 import com.dming.simple.utils.DLog;
 
-public class PluginActivity extends AppCompatActivity {
+public class PluginActivity extends Activity {
 
     @Override
     protected void attachBaseContext(Context context) {
