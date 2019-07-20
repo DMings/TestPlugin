@@ -17,9 +17,12 @@
 #### 插件资源与host资源独立
 
 &emsp;这个好处是插件资源与host资源不会相互影响，缺点是插件不能访问host的资源，冗余比较多。这是由于插件不能访问host，所有东西都由插件自身解决。优点明显，无需对资源进行特别处理，resource是插件独有，不会跟host冲突。同样插件的dex与host中的dex也是独立，只是共用一个parent，pathClassloader是host，dexClassloader是插件，他们相互对立不能访问，关系如下：
-<center>parent classloader
+
+parent classloader
+
         /\
- pathClassloader | dexClassloader</center>
+        
+ pathClassloader | dexClassloader
 
 ------
 
@@ -33,16 +36,18 @@
 &emsp;插件的四大组件数据从androidmanifest解释获取；从androidmanifest获取组件的类名，内容权限等信息相对容易，但是intent-filter数据无法获取，我猜出于安全吧（隐试数据就是为了不让第三方应用轻易知道），这里由于apk是自己的，可以手动解析，这里用pull解析androidmanifest(SPlugin中自己手写的，用了类似树的结构)，SPlugin解释了广播，为后面广播隐试注册做准备。
 
 #### 项目结构：
-<center>host     |    plugin
-hostLib  |    pluginLib</center>
 
+host     |    plugin
 
-&emsp;host为主app，依赖一个hostLib库，plugin为插件app，依赖的是pluginLib,hostLib库与hostLib库独立。
+hostLib  |    pluginLib
+
+&emsp;host为主app，依赖一个hostLib库，plugin为插件app，依赖的是pluginLib，hostLib库与hostLib库独立。
 
 #### 以下为Demo，可以下载看效果：
 
-插件app可以独立启动：
-host在asset已包含插件app:
+插件app可以独立启动（包含jni）：[插件app](https://github.com/DMings/TestPlugin/blob/master/appDemo/src/main/assets/NDK_1.0.8.apk)
+
+host在assets已包含插件app:[主app](https://github.com/DMings/TestPlugin/blob/master/appDemo/apk/host_demo.apk)
 
 #### 下面说一下四大组件实现核心过程：
 
