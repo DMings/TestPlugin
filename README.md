@@ -4,10 +4,15 @@
 #### 简单说一下现在的插件化方式历程：
 
 &emsp;1、做一个伪Activity壳，通过代理分发生命周期，灵活性较差,代表有DroidPlugin的that框架。
+
 &emsp;2、通过hook各种framework层实现对坑位的替换，如Instrumentation，H等;hook比较多，兼容性需要适配机型，代表有VirtualAPK。
+
 &emsp;3、只hook一个classloader,hook一点，坑位占用，比较稳定，代表有RePlugin。
+
 &emsp;4、无任何hook,通过代理分发技术，分发生命周期，代表有Phantom。
-###SPlugin学习Relugin思想，代理分发技术，一步一步实现插件化
+
+#### SPlugin学习Relugin思想，代理分发技术，一步一步实现插件化
+
 &emsp;首先插件化在设计分为两种：插件资源与host资源共享，插件资源与host资源独立，下面简单的说一下两个的区别与优缺点。
 
 #### 插件资源与host资源共享
@@ -37,17 +42,17 @@ parent classloader
 
 #### 项目结构：
 
-host     |    plugin
+&emsp;host     |    plugin
 
-hostLib  |    pluginLib
+&emsp;hostLib  |    pluginLib
 
-&emsp;host为主app，依赖一个hostLib库，plugin为插件app，依赖的是pluginLib，hostLib库与hostLib库独立。
+host为主app，依赖一个hostLib库，plugin为插件app，依赖的是pluginLib，hostLib库与hostLib库独立。
 
 #### 以下为Demo，可以下载看效果：
 
-插件app可以独立启动（包含jni）：[插件app](https://github.com/DMings/TestPlugin/blob/master/appDemo/src/main/assets/NDK_1.0.8.apk)
+&emsp;插件app可以独立启动（包含jni）：[插件app](https://github.com/DMings/TestPlugin/blob/master/appDemo/src/main/assets/NDK_1.0.8.apk)
 
-host在assets已包含插件app:[主app](https://github.com/DMings/TestPlugin/blob/master/appDemo/apk/host_demo.apk)
+&emsp;host在assets已包含插件app:[主app](https://github.com/DMings/TestPlugin/blob/master/appDemo/apk/host_demo.apk)
 
 #### 下面说一下四大组件实现核心过程：
 
